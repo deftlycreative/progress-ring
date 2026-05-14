@@ -28,6 +28,23 @@ A lightweight, scalable circular progress bar built as a Web Component. Works in
 
 ---
 
+## Preview
+
+<table>
+  <tr>
+    <td align="center"><b>Default</b><br><img src="./assets/screenshot-default.png" width="220"></td>
+    <td align="center"><b>Thin Track</b><br><img src="./assets/screenshot-track.png" width="220"></td>
+    <td align="center"><b>Linear Gradient</b><br><img src="./assets/screenshot-gradient.png" width="220"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Gauge / Speedometer</b><br><img src="./assets/screenshot-gauge.png" width="220"></td>
+    <td align="center"><b>Avatar</b><br><img src="./assets/screenshot-avatar.png" width="220"></td>
+    <td align="center"><b>Team Progress</b><br><img src="./assets/screenshot-team.png" width="220"></td>
+  </tr>
+</table>
+
+---
+
 ## Installation
 
 ### CDN / Plain HTML / PHP
@@ -246,6 +263,8 @@ With a gradient and a thin track:
 ></progress-ring>
 ```
 
+<img src="./assets/screenshot-gauge.png" width="220">
+
 ---
 
 ## Avatar Example
@@ -258,6 +277,8 @@ With a gradient and a thin track:
   avatar="https://example.com/photo.jpg"
 ></progress-ring>
 ```
+
+<img src="./assets/screenshot-avatar.png" width="220">
 
 ---
 
