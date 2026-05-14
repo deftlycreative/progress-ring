@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>progress-ring — demo</title>
+    <script type="module" src="../src/progress-ring.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      progress-ring {
+        display: block;
+        width: 120px;
+        height: 120px;
+      }
+      /* syntax highlight colours */
+      .code-tag {
+        color: #e879f9;
+      }
+      .code-attr {
+        color: #67e8f9;
+      }
+      .code-val {
+        color: #86efac;
+      }
+      .code-punct {
+        color: #94a3b8;
+      }
+    </style>
+  </head>
+  <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+    <div class="flex items-center gap-4 mb-12">
+      <img src="../assets/logo-light.png" alt="progress-ring logo" class="w-16 h-16">
+      <div>
+        <h1 class="text-3xl font-bold pb-1 -mt-2">progress-ring</h1>
+        <p class="text-slate-400 text-sm">Lightweight SVG Web Component &mdash; zero dependencies, works in plain HTML, Vue 3, and React.</p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <!-- ── Default ─────────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Default</h2>
+        <div class="flex justify-center">
+          <progress-ring value="72"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"72"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Custom colors ───────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Custom colors &amp; staggered delay</h2>
+        <div class="flex justify-center gap-4">
+          <progress-ring value="40" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1000" animation-delay="200"></progress-ring>
+          <progress-ring value="50" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1400" animation-delay="600"></progress-ring>
+          <progress-ring value="60" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1800" animation-delay="900"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"45"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>
+  <span class="code-attr">muted-color</span><span class="code-punct">=</span><span class="code-val">"#701a75"</span>
+  <span class="code-attr">background-color</span><span class="code-punct">=</span><span class="code-val">"#140920"</span>
+  <span class="code-attr">corner-radius</span><span class="code-punct">=</span><span class="code-val">"8"</span>
+  <span class="code-attr">animation-delay</span><span class="code-punct">=</span><span class="code-val">"200"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── No animation ────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">No animation</h2>
+        <div class="flex justify-center">
+          <progress-ring value="60" primary-color="#67e8f9" muted-color="#1e293b" animated="false"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"60"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#67e8f9"</span>
+  <span class="code-attr">animated</span><span class="code-punct">=</span><span class="code-val">"false"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Thick ring ──────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Thick ring + auto size</h2>
+        <div class="flex justify-center">
+          <progress-ring value="88" primary-color="#86efac" muted-color="#1e293b" thickness="14" size="auto" style="width: 120px; height: 120px"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"88"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#86efac"</span>
+  <span class="code-attr">muted-color</span><span class="code-punct">=</span><span class="code-val">"#1e293b"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"14"</span>
+  <span class="code-attr">size</span><span class="code-punct">=</span><span class="code-val">"auto"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Interactive ─────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Interactive</h2>
+        <div class="flex flex-col items-center gap-4">
+          <progress-ring id="live" value="50" primary-color="#e879f9" muted-color="#1e293b" thickness="10"></progress-ring>
+          <input type="range" min="0" max="100" value="50" oninput="document.getElementById('live').setAttribute('value', this.value)" class="w-36 accent-indigo-500" />
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">id</span><span class="code-punct">=</span><span class="code-val">"live"</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"50"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span>
+<span class="code-punct">&lt;</span><span class="code-tag">input</span> <span class="code-attr">type</span><span class="code-punct">=</span><span class="code-val">"range"</span> <span class="code-attr">oninput</span><span class="code-punct">=</span><span class="code-val">"
+  el.setAttribute('value', this.value)
+"</span> <span class="code-punct">/&gt;</span></code></pre>
+      </div>
+
+      <!-- ── PHP loop ────────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">PHP loop</h2>
+        <div class="flex justify-center gap-4">
+          <progress-ring value="30" primary-color="#67e8f9" muted-color="#1e293b" style="width: 80px; height: 80px"></progress-ring>
+          <progress-ring value="65" primary-color="#67e8f9" muted-color="#1e293b" style="width: 80px; height: 80px"></progress-ring>
+          <progress-ring value="100" primary-color="#67e8f9" muted-color="#1e293b" style="width: 80px; height: 80px"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;?</span><span class="code-tag">php foreach</span> <span class="code-punct">(</span><span class="code-val">$tasks</span> <span class="code-tag">as</span> <span class="code-val">$t</span><span class="code-punct">):</span> <span class="code-punct">?&gt;</span>
+<span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"&lt;?= $t['percent'] ?&gt;"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#67e8f9"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span>
+<span class="code-punct">&lt;?</span><span class="code-tag">php endforeach</span><span class="code-punct">; ?&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Avatar ──────────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Avatar</h2>
+        <div class="flex justify-center">
+          <progress-ring value="78" primary-color="#e879f9" muted-color="#701a75" thickness="4" animated="true" avatar="https://i.pravatar.cc/200?img=12" img-padding="4"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"78"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>
+  <span class="code-attr">muted-color</span><span class="code-punct">=</span><span class="code-val">"#701a75"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"4"</span>
+  <span class="code-attr">img-padding</span><span class="code-punct">=</span><span class="code-val">"4"</span>
+  <span class="code-attr">avatar</span><span class="code-punct">=</span><span class="code-val">"https://…/photo.jpg"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Team progress ───────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Team progress</h2>
+        <div class="flex justify-center gap-4">
+          <progress-ring value="90" primary-color="#e879f9" muted-color="#1e293b" thickness="6" avatar="https://i.pravatar.cc/200?img=3" style="width: 80px; height: 80px"></progress-ring>
+          <progress-ring value="55" primary-color="#67e8f9" muted-color="#1e293b" thickness="6" avatar="https://i.pravatar.cc/200?img=7" style="width: 80px; height: 80px"></progress-ring>
+          <progress-ring value="38" primary-color="#86efac" muted-color="#1e293b" thickness="6" avatar="https://i.pravatar.cc/200?img=21" style="width: 80px; height: 80px"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"90"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"6"</span>
+  <span class="code-attr">avatar</span><span class="code-punct">=</span><span class="code-val">"https://…/alice.jpg"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Gauge ───────────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Gauge / speedometer</h2>
+        <div class="flex justify-center">
+          <progress-ring value="68" primary-color="#e879f9" muted-color="#1e293b" thickness="10" cut="40" rotation="126" stroke-linecap="butt" animated="true"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"68"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>
+  <span class="code-attr">cut</span><span class="code-punct">=</span><span class="code-val">"40"</span>
+  <span class="code-attr">rotation</span><span class="code-punct">=</span><span class="code-val">"126"</span>
+  <span class="code-attr">stroke-linecap</span><span class="code-punct">=</span><span class="code-val">"butt"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Track thickness ─────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Thin track</h2>
+        <div class="flex justify-center">
+          <progress-ring value="72" primary-color="#67e8f9" muted-color="#1e293b" thickness="10" track-thickness="2" animated="true"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"72"</span>
+  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#67e8f9"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>
+  <span class="code-attr">track-thickness</span><span class="code-punct">=</span><span class="code-val">"2"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Linear gradient ────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Linear gradient</h2>
+        <div class="flex justify-center">
+          <progress-ring value="80" muted-color="#1e293b" thickness="10" linear-gradient="#e879f9,#67e8f9,#86efac" animated="true"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"80"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>
+  <span class="code-attr">linear-gradient</span><span class="code-punct">=</span><span class="code-val">"#e879f9,#67e8f9,#86efac"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Gauge + gradient ────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Gauge + gradient</h2>
+        <div class="flex justify-center">
+          <progress-ring value="75" muted-color="#1e293b" thickness="12" track-thickness="3" cut="35" rotation="112" stroke-linecap="round" linear-gradient="#e879f9,#86efac" animated="true"></progress-ring>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"75"</span>
+  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"12"</span>
+  <span class="code-attr">track-thickness</span><span class="code-punct">=</span><span class="code-val">"3"</span>
+  <span class="code-attr">cut</span><span class="code-punct">=</span><span class="code-val">"35"</span>
+  <span class="code-attr">rotation</span><span class="code-punct">=</span><span class="code-val">"112"</span>
+  <span class="code-attr">linear-gradient</span><span class="code-punct">=</span><span class="code-val">"#e879f9,#86efac"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Form queue list ────────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6 col-span-full">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Example Form queue</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-800">
+                <th class="text-left pb-3 pr-6 font-semibold">ID / Status</th>
+                <th class="text-left pb-3 pr-6 font-semibold">Customer / Form Type</th>
+                <th class="text-left pb-3 font-semibold">Submitted By</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800">
+              <!-- Row 1 — Warning / Pending -->
+              <tr>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <progress-ring value="30" primary-color="#fde047" muted-color="#1e293b" background-color="transparent" thickness="10" animated="false" show-label="true" label-format="percent" font-size="26" font-weight="700" label-color="#fde047" size="40"></progress-ring>
+                    <div>
+                      <div class="font-bold text-slate-100">#TR8KPZ</div>
+                      <div class="text-xs mt-0.5" style="color: #fde047">Pending</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-base flex-shrink-0">💳</div>
+                    <div>
+                      <div class="font-bold text-slate-100">Pinnacle Supply Co.</div>
+                      <div class="text-slate-400 text-xs mt-0.5">Payment Terms Change</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://i.pravatar.cc/80?img=33" class="w-9 h-9 rounded-full object-cover flex-shrink-0" alt="Alex Mercer" />
+                    <div>
+                      <div class="text-slate-100">Alex Mercer</div>
+                      <div class="text-slate-500 text-xs mt-0.5">Added: 05/12/2026</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 2 — Danger / Rejected -->
+              <tr>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <progress-ring value="15" primary-color="#e879f9" muted-color="#1e293b" background-color="transparent" thickness="10" animated="false" show-label="true" label-format="percent" font-size="26" font-weight="700" label-color="#e879f9" size="40"></progress-ring>
+                    <div>
+                      <div class="font-bold text-slate-100">#MX4YFN</div>
+                      <div class="text-xs mt-0.5" style="color: #e879f9">Rejected</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-base flex-shrink-0">🛒</div>
+                    <div>
+                      <div class="font-bold text-slate-100">Westgate Consulting LLC</div>
+                      <div class="text-slate-400 text-xs mt-0.5">New Supplier Request</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://i.pravatar.cc/80?img=47" class="w-9 h-9 rounded-full object-cover flex-shrink-0" alt="Jordan Holt" />
+                    <div>
+                      <div class="text-slate-100">Jordan Holt</div>
+                      <div class="text-slate-500 text-xs mt-0.5">Added: 05/12/2026</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 3 — Success / Completed -->
+              <tr>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <progress-ring value="100" primary-color="#86efac" muted-color="#1e293b" background-color="transparent" thickness="10" animated="false" show-label="true" label-format="percent" font-size="26" font-weight="700" label-color="#86efac" size="40"></progress-ring>
+                    <div>
+                      <div class="font-bold text-slate-100">#BN7WQS</div>
+                      <div class="text-xs mt-0.5" style="color: #86efac">Completed</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-base flex-shrink-0">🛒</div>
+                    <div>
+                      <div class="font-bold text-slate-100">Ironclad Logistics Inc.</div>
+                      <div class="text-slate-400 text-xs mt-0.5">New Supplier Request</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://i.pravatar.cc/80?img=52" class="w-9 h-9 rounded-full object-cover flex-shrink-0" alt="Casey Nguyen" />
+                    <div>
+                      <div class="text-slate-100">Casey Nguyen</div>
+                      <div class="text-slate-500 text-xs mt-0.5">Added: 05/11/2026</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4 — Success / Completed -->
+              <tr>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <progress-ring value="100" primary-color="#86efac" muted-color="#1e293b" background-color="transparent" thickness="10" animated="false" show-label="true" label-format="percent" font-size="26" font-weight="700" label-color="#86efac" size="40"></progress-ring>
+                    <div>
+                      <div class="font-bold text-slate-100">#CV2LHD</div>
+                      <div class="text-xs mt-0.5" style="color: #86efac">Completed</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4 pr-6">
+                  <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-slate-800 flex items-center justify-center text-base flex-shrink-0">📋</div>
+                    <div>
+                      <div class="font-bold text-slate-100">Meridian Fabrication Corp.</div>
+                      <div class="text-slate-400 text-xs mt-0.5">New Quotation</div>
+                    </div>
+                  </div>
+                </td>
+                <td class="py-4">
+                  <div class="flex items-center gap-3">
+                    <img src="https://i.pravatar.cc/80?img=57" class="w-9 h-9 rounded-full object-cover flex-shrink-0" alt="Riley Okafor" />
+                    <div>
+                      <div class="text-slate-100">Riley Okafor</div>
+                      <div class="text-slate-500 text-xs mt-0.5">Added: 05/11/2026</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;!-- </span><span class="code-tag">warning</span><span class="code-punct"> --&gt;</span>
+<span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"30"</span>  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#fde047"</span>  <span class="code-attr">label-color</span><span class="code-punct">=</span><span class="code-val">"#fde047"</span>
+  <span class="code-attr">muted-color</span><span class="code-punct">=</span><span class="code-val">"#1e293b"</span>  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>  <span class="code-attr">size</span><span class="code-punct">=</span><span class="code-val">"40"</span>
+  <span class="code-attr">label-format</span><span class="code-punct">=</span><span class="code-val">"percent"</span>  <span class="code-attr">animated</span><span class="code-punct">=</span><span class="code-val">"false"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span>
+
+<span class="code-punct">&lt;!-- </span><span class="code-tag">danger</span><span class="code-punct"> --&gt;</span>
+<span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"15"</span>  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>  <span class="code-attr">label-color</span><span class="code-punct">=</span><span class="code-val">"#e879f9"</span>
+  <span class="code-attr">muted-color</span><span class="code-punct">=</span><span class="code-val">"#1e293b"</span>  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>  <span class="code-attr">size</span><span class="code-punct">=</span><span class="code-val">"40"</span>
+  <span class="code-attr">label-format</span><span class="code-punct">=</span><span class="code-val">"percent"</span>  <span class="code-attr">animated</span><span class="code-punct">=</span><span class="code-val">"false"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span>
+
+<span class="code-punct">&lt;!-- </span><span class="code-tag">success</span><span class="code-punct"> --&gt;</span>
+<span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"100"</span>  <span class="code-attr">primary-color</span><span class="code-punct">=</span><span class="code-val">"#86efac"</span>  <span class="code-attr">label-color</span><span class="code-punct">=</span><span class="code-val">"#86efac"</span>
+  <span class="code-attr">muted-color</span><span class="code-punct">=</span><span class="code-val">"#1e293b"</span>  <span class="code-attr">thickness</span><span class="code-punct">=</span><span class="code-val">"10"</span>  <span class="code-attr">size</span><span class="code-punct">=</span><span class="code-val">"40"</span>
+  <span class="code-attr">label-format</span><span class="code-punct">=</span><span class="code-val">"percent"</span>  <span class="code-attr">animated</span><span class="code-punct">=</span><span class="code-val">"false"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+    </div>
+    </div>
+  </body>
+</html>

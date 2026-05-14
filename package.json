@@ -1,0 +1,94 @@
+{
+  "name": "@deftlycreative/progress-ring",
+  "version": "1.0.1",
+  "description": "A circular progress ring as a Web Component with Vue and React wrappers",
+  "type": "module",
+  "main": "src/progress-ring.js",
+  "module": "src/progress-ring.js",
+  "types": "src/progress-ring.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/progress-ring.d.ts",
+      "default": "./src/progress-ring.js"
+    },
+    "./vue": "./src/ProgressRing.vue",
+    "./react": "./src/ProgressRing.tsx"
+  },
+  "files": [
+    "src",
+    "dist",
+    "assets",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": [
+    "./src/progress-ring.js"
+  ],
+  "scripts": {
+    "dev": "vite --open /examples/index.html",
+    "dev:vue": "vite --root examples --config vite.config.js vue-demo.html --open",
+    "dev:react": "vite --root examples --config vite.config.js react-demo.html --open",
+    "build": "vite build",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "progress",
+    "ring",
+    "circle",
+    "svg",
+    "web-component",
+    "custom-element",
+    "vue",
+    "react"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deftlycreative/progress-ring.git"
+  },
+  "homepage": "https://github.com/deftlycreative/progress-ring#readme",
+  "bugs": {
+    "url": "https://github.com/deftlycreative/progress-ring/issues"
+  },
+  "unpkg": "dist/progress-ring.umd.js",
+  "jsdelivr": "dist/progress-ring.umd.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vitest": "^2.1.0",
+    "happy-dom": "^14.0.0",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "vue": "^3.4.0",
+    "@vue/test-utils": "^2.4.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0"
+  }
+}
