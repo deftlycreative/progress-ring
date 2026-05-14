@@ -588,6 +588,37 @@ describe("label-format", () => {
         expect(label(el).textContent).toBe("");
     });
 
+    it('label-format="integer" shows rounded percent without %', () => {
+        el = mount({ value: 75, "label-format": "integer", animated: false });
+        expect(label(el).textContent).toBe("75");
+    });
+
+    it('label-format="integer" rounds to nearest integer', () => {
+        // 1/3 = 33.33...% → 33
+        el = mount({ value: 1, max: 3, "label-format": "integer", animated: false });
+        expect(label(el).textContent).toBe("33");
+    });
+
+});
+
+// ── text-override ─────────────────────────────────────────────────────────────
+
+describe("text-override", () => {
+    it("shows override text instead of label-format output", () => {
+        el = mount({ value: 50, "text-override": "✓", animated: false });
+        expect(label(el).textContent).toBe("✓");
+    });
+
+    it("override takes precedence over label-format", () => {
+        el = mount({ value: 50, "label-format": "fraction", "text-override": "done", animated: false });
+        expect(label(el).textContent).toBe("done");
+    });
+
+    it("empty text-override falls through to label-format", () => {
+        el = mount({ value: 50, "text-override": "", animated: false });
+        expect(label(el).textContent).toBe("50%");
+    });
+
 });
 
 // ── typography ────────────────────────────────────────────────────────────────

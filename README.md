@@ -185,7 +185,8 @@ The percentage is computed internally as `(value - min) / (max - min) * 100`, cl
 
 | HTML Attribute | React Prop | Type | Default | Description |
 |---|---|---|---|---|
-| `label-format` | `labelFormat` | `"percent"` \| `"fraction"` \| `"value"` \| `"none"` | `"percent"` | Controls what is displayed in the center of the circle. Use `"none"` to hide it |
+| `label-format` | `labelFormat` | `"percent"` \| `"fraction"` \| `"value"` \| `"integer"` \| `"none"` | `"percent"` | Controls what is displayed in the center of the circle. Use `"none"` to hide it |
+| `text-override` | `textOverride` | string | `""` | Override the label text entirely. When non-empty, replaces whatever `label-format` would show |
 | `label-color` | `labelColor` | string | *(primary color)* | Color of the center label text. Defaults to `primary-color` |
 | `font-family` | `fontFamily` | string | `inherit` | Font family for the label |
 | `font-size` | `fontSize` | number | `20` | Font size for the label in SVG units (scales with the component) |
@@ -196,6 +197,7 @@ The percentage is computed internally as `(value - min) / (max - min) * 100`, cl
 | `label-format` | Output |
 |---|---|
 | `percent` | `50%` |
+| `integer` | `50` |
 | `fraction` | `5/10` |
 | `value` | `5` |
 | `none` | *(hidden)* |

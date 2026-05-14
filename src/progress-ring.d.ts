@@ -42,7 +42,9 @@ export interface ProgressRingAttributes {
     /** Host element border-radius in px. Default: 0 */
     "corner-radius"?: number | string;
     /** What to display in the centre. Default: "percent" */
-    "label-format"?: "percent" | "fraction" | "value" | "none";
+    "label-format"?: "percent" | "fraction" | "value" | "integer" | "none";
+    /** Override the label text entirely. When non-empty, replaces whatever label-format would show */
+    "text-override"?: string;
     /** Label colour. Defaults to primary-color. */
     "label-color"?: string;
     /** Label font family. Default: inherit */

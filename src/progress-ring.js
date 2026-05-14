@@ -17,6 +17,7 @@ const DEFAULTS = {
     fontSize: "20",
     fontWeight: "400",
     labelFormat: "percent",
+    textOverride: "",
     // labelColor defaults to primaryColor (derived — see _getProps)
     size: "100",
     padding: "0",
@@ -52,6 +53,7 @@ class ProgressRing extends HTMLElement {
             "font-weight",
             "label-color",
             "label-format",
+            "text-override",
             "size",
             "padding",
             "corner-radius",
@@ -101,6 +103,7 @@ class ProgressRing extends HTMLElement {
         const fontSize = parseInt(attr("font-size") ?? DEFAULTS.fontSize, 10);
         const fontWeight = attr("font-weight") ?? DEFAULTS.fontWeight;
         const labelFormat = attr("label-format") ?? DEFAULTS.labelFormat;
+        const textOverride = attr("text-override") ?? DEFAULTS.textOverride;
         const labelColor = attr("label-color") ?? primary;
         const rawSize = attr("size") ?? DEFAULTS.size;
         const size = rawSize === "auto" ? "auto" : parseInt(rawSize, 10);
@@ -131,6 +134,7 @@ class ProgressRing extends HTMLElement {
             fontSize,
             fontWeight,
             labelFormat,
+            textOverride,
             labelColor,
             size,
             padding,
@@ -232,6 +236,7 @@ class ProgressRing extends HTMLElement {
             fontSize,
             fontWeight,
             labelFormat,
+            textOverride,
             labelColor,
             size,
             padding,
@@ -310,9 +315,11 @@ class ProgressRing extends HTMLElement {
         this._label.setAttribute("font-size", fontSize);
         this._label.setAttribute("font-weight", fontWeight);
         const labelText = (() => {
+            if (textOverride) return textOverride;
             if (labelFormat === "none") return "";
             if (labelFormat === "fraction") return `${value}/${max}`;
             if (labelFormat === "value") return `${value}`;
+            if (labelFormat === "integer") return `${Math.round(percent)}`;
             return `${Math.round(percent)}%`; // 'percent' default
         })();
         this._label.textContent = labelText;

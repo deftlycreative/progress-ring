@@ -148,6 +148,26 @@ describe("ProgressRing (React wrapper)", () => {
         expect(getEl(container).getAttribute("label-format")).toBe("fraction");
     });
 
+    it("sets label-format='integer' attribute", async () => {
+        const { container } = render(<ProgressRing labelFormat="integer" />);
+        await act(async () => {});
+        expect(getEl(container).getAttribute("label-format")).toBe("integer");
+    });
+
+    it("sets text-override attribute", async () => {
+        const { container } = render(<ProgressRing textOverride="✓" />);
+        await act(async () => {});
+        expect(getEl(container).getAttribute("text-override")).toBe("✓");
+    });
+
+    it("removes text-override attribute when prop is empty", async () => {
+        const { container, rerender } = render(<ProgressRing textOverride="✓" />);
+        await act(async () => {});
+        rerender(<ProgressRing textOverride="" />);
+        await act(async () => {});
+        expect(getEl(container).hasAttribute("text-override")).toBe(false);
+    });
+
     it("updates value attribute when prop changes", async () => {
         const { container, rerender } = render(<ProgressRing value={25} />);
         await act(async () => {});

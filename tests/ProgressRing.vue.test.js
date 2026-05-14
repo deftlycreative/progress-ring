@@ -138,6 +138,24 @@ describe("ProgressRing (Vue wrapper)", () => {
         expect(wrapper.element.getAttribute("label-format")).toBe("fraction");
     });
 
+    it("sets label-format='integer' attribute", () => {
+        const wrapper = mount(ProgressRing, {
+            props: { labelFormat: "integer" },
+        });
+        expect(wrapper.element.getAttribute("label-format")).toBe("integer");
+    });
+
+    it("sets text-override attribute", () => {
+        const wrapper = mount(ProgressRing, { props: { textOverride: "✓" } });
+        expect(wrapper.element.getAttribute("text-override")).toBe("✓");
+    });
+
+    it("updates text-override attribute when prop changes", async () => {
+        const wrapper = mount(ProgressRing, { props: { textOverride: "✓" } });
+        await wrapper.setProps({ textOverride: "!" });
+        expect(wrapper.element.getAttribute("text-override")).toBe("!");
+    });
+
     it("updates value attribute when prop changes", async () => {
         const wrapper = mount(ProgressRing, { props: { value: 25 } });
         await wrapper.setProps({ value: 80 });

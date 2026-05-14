@@ -18,7 +18,9 @@ export interface ProgressRingProps {
     fontSize?: number;
     fontWeight?: number | string;
     labelColor?: string;
-    labelFormat?: "percent" | "fraction" | "value" | "none";
+    labelFormat?: "percent" | "fraction" | "value" | "integer" | "none";
+    /** Override the label text entirely. When non-empty, replaces whatever labelFormat would show */
+    textOverride?: string;
     /** URL of an avatar image to display inside the circle instead of the label text */
     avatar?: string;
     /** Inset spacing in SVG units between the avatar image and the inner edge of the arc. Default: 0 */
@@ -61,7 +63,8 @@ export default function ProgressRing({
     fontSize = 20,
     fontWeight = 400,
     labelColor,
-    labelFormat = "percent" as "percent" | "fraction" | "value" | "none",
+    labelFormat = "percent" as "percent" | "fraction" | "value" | "integer" | "none",
+    textOverride,
     avatar,
     size = 100 as number | "auto",
     padding = 0,
@@ -108,6 +111,8 @@ export default function ProgressRing({
         if (linearGradient) el.setAttribute("linear-gradient", linearGradient);
         else el.removeAttribute("linear-gradient");
         el.setAttribute("label-format", labelFormat);
+        if (textOverride) el.setAttribute("text-override", textOverride);
+        else el.removeAttribute("text-override");
         el.setAttribute("size", String(size));
         el.setAttribute("padding", String(padding));
         el.setAttribute("corner-radius", String(cornerRadius));
@@ -129,6 +134,7 @@ export default function ProgressRing({
         fontWeight,
         labelColor,
         labelFormat,
+        textOverride,
         avatar,
         imgPadding,
         cut,

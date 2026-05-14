@@ -17,6 +17,7 @@
         :font-weight="String(fontWeight)"
         :label-color="labelColor"
         :label-format="labelFormat"
+        :text-override="textOverride"
         :avatar="avatar"
         :img-padding="String(imgPadding)"
         :cut="String(cut)"
@@ -50,6 +51,7 @@ defineProps({
     fontWeight: { type: [Number, String], default: 400 },
     labelColor: { type: String, default: null },
     labelFormat: { type: String, default: "percent" },
+    textOverride: { type: String, default: null },
     avatar: { type: String, default: null },
     imgPadding: { type: Number, default: 0 },
     cut: { type: Number, default: 0 },
