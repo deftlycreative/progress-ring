@@ -29,6 +29,8 @@ export interface ProgressRingAttributes {
     "animation-duration"?: number | string;
     /** Draw-in animation delay in ms. Default: 0 */
     "animation-delay"?: number | string;
+    /** Whether animation duration is constant or scales with arc length. Default: "speed" */
+    "animation-mode"?: "speed" | "duration";
     /** Stroke width in SVG units. Default: 8 */
     thickness?: number | string;
     /** Arc endpoint shape. Default: "round" */

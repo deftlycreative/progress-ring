@@ -1,6 +1,6 @@
 {
   "name": "@deftlycreative/progress-ring",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A circular progress ring as a Web Component with Vue and React wrappers",
   "type": "module",
   "main": "src/progress-ring.js",

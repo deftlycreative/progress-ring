@@ -72,6 +72,16 @@ describe("ProgressRing (Vue wrapper)", () => {
         expect(wrapper.element.getAttribute("animation-delay")).toBe("300");
     });
 
+    it("sets animation-mode attribute", () => {
+        const wrapper = mount(ProgressRing, { props: { animationMode: "duration" } });
+        expect(wrapper.element.getAttribute("animation-mode")).toBe("duration");
+    });
+
+    it("defaults animation-mode to 'speed'", () => {
+        const wrapper = mount(ProgressRing, {});
+        expect(wrapper.element.getAttribute("animation-mode")).toBe("speed");
+    });
+
     it("sets thickness attribute", () => {
         const wrapper = mount(ProgressRing, { props: { thickness: 14 } });
         expect(wrapper.element.getAttribute("thickness")).toBe("14");

@@ -10,6 +10,7 @@ const DEFAULTS = {
     backgroundColor: "transparent",
     animationDelay: "0",
     animationDuration: "600",
+    animationMode: "speed",
     thickness: "8",
     strokeLinecap: "round",
     direction: "clockwise",
@@ -45,6 +46,7 @@ class ProgressRing extends HTMLElement {
             "animated",
             "animation-delay",
             "animation-duration",
+            "animation-mode",
             "thickness",
             "stroke-linecap",
             "direction",
@@ -96,6 +98,7 @@ class ProgressRing extends HTMLElement {
         const animated = attr("animated") !== "false";
         const animationDelay = parseInt(attr("animation-delay") ?? DEFAULTS.animationDelay, 10);
         const animationDuration = parseInt(attr("animation-duration") ?? DEFAULTS.animationDuration, 10);
+        const animationMode = attr("animation-mode") ?? DEFAULTS.animationMode;
         const thickness = parseInt(attr("thickness") ?? DEFAULTS.thickness, 10);
         const strokeLinecap = attr("stroke-linecap") ?? DEFAULTS.strokeLinecap;
         const direction = attr("direction") ?? DEFAULTS.direction;
@@ -127,6 +130,7 @@ class ProgressRing extends HTMLElement {
             animated,
             animationDelay,
             animationDuration,
+            animationMode,
             thickness,
             strokeLinecap,
             direction,
@@ -229,6 +233,7 @@ class ProgressRing extends HTMLElement {
             animated,
             animationDelay,
             animationDuration,
+            animationMode,
             thickness,
             strokeLinecap,
             direction,
@@ -306,8 +311,11 @@ class ProgressRing extends HTMLElement {
         } else {
             this._arc.setAttribute("stroke", primary);
         }
+        const effectiveDuration = animationMode === "duration"
+            ? animationDuration
+            : animationDuration * (percent / 100);
         this._arc.style.transition = animated
-            ? `stroke-dashoffset ${animationDuration}ms ease ${animationDelay}ms`
+            ? `stroke-dashoffset ${effectiveDuration}ms ease ${animationDelay}ms`
             : "none";
 
         this._label.setAttribute("fill", labelColor);

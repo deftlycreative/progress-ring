@@ -25,6 +25,10 @@
       .code-punct {
         color: #94a3b8;
       }
+      .code-comment {
+        color: #64748b;
+        font-style: italic;
+      }
     </style>
   </head>
   <body class="bg-slate-950 text-slate-100 min-h-screen font-sans">
@@ -54,8 +58,8 @@
         <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Custom colors &amp; staggered delay</h2>
         <div class="flex justify-center gap-4">
           <progress-ring value="40" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1000" animation-delay="200"></progress-ring>
-          <progress-ring value="50" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1400" animation-delay="600"></progress-ring>
-          <progress-ring value="60" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1800" animation-delay="900"></progress-ring>
+          <progress-ring value="50" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1000" animation-delay="600"></progress-ring>
+          <progress-ring value="60" primary-color="#e879f9" muted-color="#701a75" background-color="#140920" corner-radius="8" padding="4" font-family="'Courier New', Courier, monospace" font-size="34" size="80" animated="true" animation-duration="1000" animation-delay="900"></progress-ring>
         </div>
         <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
   <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"45"</span>
@@ -64,6 +68,38 @@
   <span class="code-attr">background-color</span><span class="code-punct">=</span><span class="code-val">"#140920"</span>
   <span class="code-attr">corner-radius</span><span class="code-punct">=</span><span class="code-val">"8"</span>
   <span class="code-attr">animation-delay</span><span class="code-punct">=</span><span class="code-val">"200"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
+      <!-- ── Animation mode ──────────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Animation mode</h2>
+        <p class="text-slate-400 text-xs">Both pairs use the same values (25% and 75%). <b class="text-slate-200">speed</b> mode (default) keeps the visual speed constant. <b class="text-slate-200">duration</b> mode keeps the clock time constant.</p>
+        <div class="flex justify-center gap-8">
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-slate-400 text-xs">speed (default)</span>
+            <div class="flex gap-4">
+              <progress-ring value="25" animation-duration="1500" animation-mode="speed" primary-color="#818cf8" muted-color="#1e293b" size="75"></progress-ring>
+              <progress-ring value="75" animation-duration="1500" animation-mode="speed" primary-color="#818cf8" muted-color="#1e293b" size="75"></progress-ring>
+            </div>
+          </div>
+          <div class="flex flex-col items-center gap-2">
+            <span class="text-slate-400 text-xs">duration</span>
+            <div class="flex gap-4">
+              <progress-ring value="25" animation-duration="1500" animation-mode="duration" primary-color="#f472b6" muted-color="#1e293b" size="75"></progress-ring>
+              <progress-ring value="75" animation-duration="1500" animation-mode="duration" primary-color="#f472b6" muted-color="#1e293b" size="75"></progress-ring>
+            </div>
+          </div>
+        </div>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"25"</span>
+  <span class="code-attr">animation-mode</span><span class="code-punct">=</span><span class="code-val">"speed"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span>
+
+<span class="code-comment">&lt;!-- or lock to a fixed duration --&gt;</span>
+<span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"25"</span>
+  <span class="code-attr">animation-mode</span><span class="code-punct">=</span><span class="code-val">"duration"</span>
 <span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
       </div>
 

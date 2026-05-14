@@ -52,6 +52,16 @@ export default function App() {
           <span>No animation</span>
           <ProgressRing value={60} primaryColor="#f4a261" animated={false} style={circleStyle} />
         </div>
+
+        <div className="card">
+          <span>Speed mode (default)</span>
+          <ProgressRing value={30} primaryColor="#818cf8" animationDuration={1500} animationMode="speed" style={circleStyle} />
+        </div>
+
+        <div className="card">
+          <span>Duration mode</span>
+          <ProgressRing value={30} primaryColor="#f472b6" animationDuration={1500} animationMode="duration" style={circleStyle} />
+        </div>
       </div>
 
       {/* Loop example */}

@@ -840,8 +840,8 @@ describe("animation", () => {
         expect(arc(el).style.transition).toBe("none");
     });
 
-    it("transition includes animation-duration", () => {
-        el = mount({ animated: true, "animation-duration": 1200 });
+    it("transition includes animation-duration scaled by percent", () => {
+        el = mount({ animated: true, "animation-duration": 1200, value: 100 });
         expect(arc(el).style.transition).toContain("1200ms");
     });
 
@@ -850,9 +850,29 @@ describe("animation", () => {
         expect(arc(el).style.transition).toContain("400ms");
     });
 
-    it("defaults animation-duration to 600ms", () => {
-        el = mount({ animated: true });
+    it("defaults animation-duration to 600ms at 100%", () => {
+        el = mount({ animated: true, value: 100 });
         expect(arc(el).style.transition).toContain("600ms");
+    });
+
+    it("scales animation duration proportionally to percent (speed mode)", () => {
+        el = mount({ animated: true, "animation-duration": 1000, value: 50 });
+        expect(arc(el).style.transition).toContain("500ms");
+    });
+
+    it("scales animation duration to near-zero at low percent (speed mode)", () => {
+        el = mount({ animated: true, "animation-duration": 1000, value: 10 });
+        expect(arc(el).style.transition).toContain("100ms");
+    });
+
+    it("uses fixed duration when animation-mode is 'duration'", () => {
+        el = mount({ animated: true, "animation-duration": 1000, value: 50, "animation-mode": "duration" });
+        expect(arc(el).style.transition).toContain("1000ms");
+    });
+
+    it("duration mode uses full duration even at low percent", () => {
+        el = mount({ animated: true, "animation-duration": 800, value: 10, "animation-mode": "duration" });
+        expect(arc(el).style.transition).toContain("800ms");
     });
 
     it("defaults animation-delay to 0ms", () => {

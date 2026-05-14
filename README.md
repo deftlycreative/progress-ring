@@ -178,8 +178,9 @@ The percentage is computed internally as `(value - min) / (max - min) * 100`, cl
 | HTML Attribute | React Prop | Type | Default | Description |
 |---|---|---|---|---|
 | `animated` | `animated` | boolean | `true` | Whether to animate the arc drawing in on mount |
-| `animation-duration` | `animationDuration` | number | `600` | Duration of the draw-in animation in milliseconds |
+| `animation-duration` | `animationDuration` | number | `600` | Maximum duration of the draw-in animation in milliseconds. Actual duration depends on `animation-mode` |
 | `animation-delay` | `animationDelay` | number | `0` | Delay before the animation starts in milliseconds. Useful for staggering multiple circles |
+| `animation-mode` | `animationMode` | `"speed"` \| `"duration"` | `"speed"` | `"speed"` scales the duration proportionally to arc length so all arcs animate at the same visual speed. `"duration"` uses a fixed duration regardless of arc length |
 
 ### Label
 

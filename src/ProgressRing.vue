@@ -9,6 +9,7 @@
         :animated="String(animated)"
         :animation-delay="String(animationDelay)"
         :animation-duration="String(animationDuration)"
+        :animation-mode="animationMode"
         :thickness="String(thickness)"
         :stroke-linecap="strokeLinecap"
         :direction="direction"
@@ -43,6 +44,7 @@ defineProps({
     animated: { type: Boolean, default: true },
     animationDelay: { type: Number, default: 0 },
     animationDuration: { type: Number, default: 600 },
+    animationMode: { type: String, default: 'speed' },
     thickness: { type: Number, default: 8 },
     strokeLinecap: { type: String, default: "round" },
     direction: { type: String, default: "clockwise" },

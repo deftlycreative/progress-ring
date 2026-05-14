@@ -70,6 +70,18 @@ describe("ProgressRing (React wrapper)", () => {
         expect(getEl(container).getAttribute("animation-delay")).toBe("300");
     });
 
+    it("sets animation-mode attribute", async () => {
+        const { container } = render(<ProgressRing animationMode="duration" />);
+        await act(async () => {});
+        expect(getEl(container).getAttribute("animation-mode")).toBe("duration");
+    });
+
+    it("defaults animation-mode to 'speed'", async () => {
+        const { container } = render(<ProgressRing />);
+        await act(async () => {});
+        expect(getEl(container).getAttribute("animation-mode")).toBe("speed");
+    });
+
     it("sets thickness attribute", async () => {
         const { container } = render(<ProgressRing thickness={12} />);
         await act(async () => {});

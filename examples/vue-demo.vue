@@ -35,6 +35,16 @@
         <span>No animation</span>
         <ProgressRing :value="60" primary-color="#f4a261" :animated="false" />
       </div>
+
+      <div class="card">
+        <span>Speed mode (default)</span>
+        <ProgressRing :value="30" primary-color="#818cf8" :animation-duration="1500" animation-mode="speed" />
+      </div>
+
+      <div class="card">
+        <span>Duration mode</span>
+        <ProgressRing :value="30" primary-color="#f472b6" :animation-duration="1500" animation-mode="duration" />
+      </div>
     </div>
 
     <!-- Loop example -->

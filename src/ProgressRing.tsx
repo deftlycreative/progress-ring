@@ -11,6 +11,8 @@ export interface ProgressRingProps {
     animated?: boolean;
     animationDelay?: number;
     animationDuration?: number;
+    /** Whether animation duration is constant or scales with arc length. Default: "speed" */
+    animationMode?: "speed" | "duration";
     thickness?: number;
     strokeLinecap?: "round" | "butt" | "square";
     direction?: "clockwise" | "counter-clockwise";
@@ -56,6 +58,7 @@ export default function ProgressRing({
     animated = true,
     animationDelay = 0,
     animationDuration = 600,
+    animationMode = "speed" as "speed" | "duration",
     thickness = 8,
     strokeLinecap = "round" as "round" | "butt" | "square",
     direction = "clockwise" as "clockwise" | "counter-clockwise",
@@ -91,6 +94,7 @@ export default function ProgressRing({
         el.setAttribute("animated", String(animated));
         el.setAttribute("animation-delay", String(animationDelay));
         el.setAttribute("animation-duration", String(animationDuration));
+        el.setAttribute("animation-mode", animationMode);
         el.setAttribute("thickness", String(thickness));
         el.setAttribute("stroke-linecap", strokeLinecap);
         el.setAttribute("direction", direction);
@@ -126,6 +130,7 @@ export default function ProgressRing({
         animated,
         animationDelay,
         animationDuration,
+        animationMode,
         thickness,
         strokeLinecap,
         direction,
