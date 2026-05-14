@@ -1,6 +1,6 @@
 {
   "name": "@deftlycreative/progress-ring",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A circular progress ring as a Web Component with Vue and React wrappers",
   "type": "module",
   "main": "src/progress-ring.js",
@@ -47,7 +47,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/deftlycreative/progress-ring.git"
+    "url": "git+https://github.com/deftlycreative/progress-ring.git"
   },
   "homepage": "https://github.com/deftlycreative/progress-ring#readme",
   "bugs": {
