@@ -80,6 +80,15 @@ class ProgressRing extends HTMLElement {
         this._apply();
     }
 
+    disconnectedCallback() {
+        // Cancel any in-flight animation frame so the closure doesn't hold the
+        // element alive for an extra ~33 ms after it has been removed from the DOM.
+        if (this._animRaf !== undefined) {
+            cancelAnimationFrame(this._animRaf);
+            this._animRaf = undefined;
+        }
+    }
+
     attributeChangedCallback() {
         if (!this._built) return;
         // Batch synchronous setAttribute bursts (e.g. from React/Vue wrappers that

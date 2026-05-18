@@ -1362,6 +1362,22 @@ describe("lifecycle", () => {
         await Promise.resolve();
         expect(label(el).textContent).toBe("50%");
     });
+
+    it("disconnectedCallback cancels a pending animation frame", () => {
+        el = mount({ value: 50, animated: true });
+        // _animRaf is set during the animation triggered by connectedCallback
+        const rafId = el._animRaf;
+        expect(rafId).not.toBeUndefined();
+        el.remove();
+        expect(el._animRaf).toBeUndefined();
+    });
+
+    it("removing element during animation does not throw", () => {
+        expect(() => {
+            el = mount({ value: 75, animated: true });
+            el.remove();
+        }).not.toThrow();
+    });
 });
 
 // ── animation lifecycle ───────────────────────────────────────────────────────
