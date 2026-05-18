@@ -242,16 +242,18 @@ describe("track-thickness", () => {
         expect(parseFloat(track(el).getAttribute("stroke-width"))).toBe(2);
     });
 
-    it("updates reactively", () => {
+    it("updates reactively", async () => {
         el = mount({ thickness: 8, animated: false });
         el.setAttribute("track-thickness", "3");
+        await Promise.resolve();
         expect(parseFloat(track(el).getAttribute("stroke-width"))).toBe(3);
         expect(parseFloat(arc(el).getAttribute("stroke-width"))).toBe(8);
     });
 
-    it("removing track-thickness reverts to arc thickness", () => {
+    it("removing track-thickness reverts to arc thickness", async () => {
         el = mount({ thickness: 8, "track-thickness": 2, animated: false });
         el.removeAttribute("track-thickness");
+        await Promise.resolve();
         expect(parseFloat(track(el).getAttribute("stroke-width"))).toBe(8);
     });
 });
@@ -319,19 +321,21 @@ describe("colors", () => {
         expect(label(el).getAttribute("fill")).toBe("#ff0000");
     });
 
-    it("primary-color change updates label fill when no explicit label-color", () => {
+    it("primary-color change updates label fill when no explicit label-color", async () => {
         el = mount({ "primary-color": "#aaaaaa", animated: false });
         el.setAttribute("primary-color", "#123456");
+        await Promise.resolve();
         expect(label(el).getAttribute("fill")).toBe("#123456");
     });
 
-    it("removing label-color falls back to primary-color", () => {
+    it("removing label-color falls back to primary-color", async () => {
         el = mount({
             "primary-color": "#aaaaaa",
             "label-color": "#ff0000",
             animated: false,
         });
         el.removeAttribute("label-color");
+        await Promise.resolve();
         expect(label(el).getAttribute("fill")).toBe("#aaaaaa");
     });
 
@@ -402,19 +406,21 @@ describe("linear-gradient", () => {
         expect(arc(el).getAttribute("stroke")).toBe("#ff0000");
     });
 
-    it("reverts to primary-color when attribute is removed", () => {
+    it("reverts to primary-color when attribute is removed", async () => {
         el = mount({
             "primary-color": "#abcdef",
             "linear-gradient": "#ff0000,#0000ff",
             animated: false,
         });
         el.removeAttribute("linear-gradient");
+        await Promise.resolve();
         expect(arc(el).getAttribute("stroke")).toBe("#abcdef");
     });
 
-    it("updates stops when attribute value changes", () => {
+    it("updates stops when attribute value changes", async () => {
         el = mount({ "linear-gradient": "#ff0000,#0000ff", animated: false });
         el.setAttribute("linear-gradient", "#00ff00,#ff00ff,#0000ff");
+        await Promise.resolve();
         expect(gradient(el).querySelectorAll("stop").length).toBe(3);
     });
 
@@ -769,9 +775,10 @@ describe("cut", () => {
         );
     });
 
-    it("updates reactively", () => {
+    it("updates reactively", async () => {
         el = mount({ cut: 0, animated: false });
         el.setAttribute("cut", "40");
+        await Promise.resolve();
         expect(parseFloat(arc(el).getAttribute("stroke-dasharray"))).toBeCloseTo(
             availableCirc(40),
             1,
@@ -820,9 +827,10 @@ describe("rotation", () => {
         );
     });
 
-    it("updates reactively", () => {
+    it("updates reactively", async () => {
         el = mount({ rotation: 0, animated: false });
         el.setAttribute("rotation", "90");
+        await Promise.resolve();
         expect(arc(el).getAttribute("transform")).toBe("rotate(90, 50, 50)");
     });
 });
@@ -884,137 +892,158 @@ describe("animation", () => {
 // ── reactivity ───────────────────────────────────────────────────────────────
 
 describe("reactivity (attribute changes after mount)", () => {
-    it("updates aria-label when value changes", () => {
+    it("updates aria-label when value changes", async () => {
         el = mount({ value: 0, animated: false });
         el.setAttribute("value", "80");
+        await Promise.resolve();
         expect(svgEl(el).getAttribute("aria-label")).toBe("80% complete");
     });
 
-    it("updates dashoffset when value changes", () => {
+    it("updates dashoffset when value changes", async () => {
         el = mount({ value: 0, animated: false });
         el.setAttribute("value", "100");
+        await Promise.resolve();
         expect(parseFloat(arc(el).getAttribute("stroke-dashoffset"))).toBeCloseTo(0, 1);
     });
 
-    it("updates label text when value changes", () => {
+    it("updates label text when value changes", async () => {
         el = mount({ value: 0, animated: false });
         el.setAttribute("value", "75");
+        await Promise.resolve();
         expect(label(el).textContent).toBe("75%");
     });
 
-    it("updates arc stroke when primary-color changes", () => {
+    it("updates arc stroke when primary-color changes", async () => {
         el = mount({ animated: false });
         el.setAttribute("primary-color", "#00ff00");
+        await Promise.resolve();
         expect(arc(el).getAttribute("stroke")).toBe("#00ff00");
     });
 
-    it("updates track stroke when muted-color changes", () => {
+    it("updates track stroke when muted-color changes", async () => {
         el = mount({ animated: false });
         el.setAttribute("muted-color", "#aabbcc");
+        await Promise.resolve();
         expect(track(el).getAttribute("stroke")).toBe("#aabbcc");
     });
 
-    it("updates host background when background-color changes", () => {
+    it("updates host background when background-color changes", async () => {
         el = mount({ animated: false });
         el.setAttribute("background-color", "#123456");
+        await Promise.resolve();
         expect(el.style.background).toBe("#123456");
     });
 
-    it("updates host size when size changes", () => {
+    it("updates host size when size changes", async () => {
         el = mount({ size: 100, animated: false });
         el.setAttribute("size", "250");
+        await Promise.resolve();
         expect(el.style.width).toBe("250px");
         expect(el.style.height).toBe("250px");
     });
 
-    it('switches to size="auto" dynamically', () => {
+    it('switches to size="auto" dynamically', async () => {
         el = mount({ size: 100, animated: false });
         el.setAttribute("size", "auto");
+        await Promise.resolve();
         expect(el.style.width).toBe("100%");
         expect(el.style.aspectRatio).toBe("1");
     });
 
-    it("updates label-format dynamically", () => {
+    it("updates label-format dynamically", async () => {
         el = mount({ value: 5, max: 10, animated: false });
         el.setAttribute("label-format", "fraction");
+        await Promise.resolve();
         expect(label(el).textContent).toBe("5/10");
     });
 
-    it("hides label when label-format set to none after mount", () => {
+    it("hides label when label-format set to none after mount", async () => {
         el = mount({ value: 50, animated: false });
         el.setAttribute("label-format", "none");
+        await Promise.resolve();
         expect(label(el).textContent).toBe("");
     });
 
-    it("updates stroke-linecap dynamically", () => {
+    it("updates stroke-linecap dynamically", async () => {
         el = mount({ animated: false });
         el.setAttribute("stroke-linecap", "butt");
+        await Promise.resolve();
         expect(arc(el).getAttribute("stroke-linecap")).toBe("butt");
     });
 
-    it("updates direction dynamically", () => {
+    it("updates direction dynamically", async () => {
         el = mount({ direction: "clockwise", animated: false });
         el.setAttribute("direction", "counter-clockwise");
+        await Promise.resolve();
         expect(arc(el).getAttribute("transform")).not.toBe("rotate(-90, 50, 50)");
     });
 
-    it("updates font-size dynamically", () => {
+    it("updates font-size dynamically", async () => {
         el = mount({ animated: false });
         el.setAttribute("font-size", "28");
+        await Promise.resolve();
         expect(label(el).getAttribute("font-size")).toBe("28");
     });
 
-    it("updates thickness and recalculates geometry", () => {
+    it("updates thickness and recalculates geometry", async () => {
         el = mount({ value: 50, thickness: 8, animated: false });
         el.setAttribute("thickness", "20");
+        await Promise.resolve();
         const circ = circumference(20);
         expect(parseFloat(arc(el).getAttribute("stroke-dasharray"))).toBeCloseTo(circ, 1);
         expect(parseFloat(arc(el).getAttribute("stroke-dashoffset"))).toBeCloseTo(circ / 2, 1);
     });
 
-    it("updates min and recomputes percent", () => {
+    it("updates min and recomputes percent", async () => {
         // value=60, min=0, max=100 → 60%
         el = mount({ value: 60, min: 0, max: 100, animated: false });
         // raise min to 10 → (60-10)/(100-10)*100 = 55.55...% ≈ 56%
         el.setAttribute("min", "10");
+        await Promise.resolve();
         expect(svgEl(el).getAttribute("aria-label")).toBe("56% complete");
     });
 
-    it("updates max and recomputes percent", () => {
+    it("updates max and recomputes percent", async () => {
         // value=50, min=0, max=100 → 50%
         el = mount({ value: 50, min: 0, max: 100, animated: false });
         // lower max to 50 → 100%
         el.setAttribute("max", "50");
+        await Promise.resolve();
         expect(svgEl(el).getAttribute("aria-label")).toBe("100% complete");
     });
 
-    it("updates label fill when label-color changes", () => {
+    it("updates label fill when label-color changes", async () => {
         el = mount({ "label-color": "#aaaaaa", animated: false });
         el.setAttribute("label-color", "#ff0000");
+        await Promise.resolve();
         expect(label(el).getAttribute("fill")).toBe("#ff0000");
     });
 
-    it("updates font-family dynamically", () => {
+    it("updates font-family dynamically", async () => {
         el = mount({ animated: false });
         el.setAttribute("font-family", "Courier New, monospace");
+        await Promise.resolve();
         expect(label(el).getAttribute("font-family")).toBe("Courier New, monospace");
     });
 
-    it("updates font-weight dynamically", () => {
+    it("updates font-weight dynamically", async () => {
         el = mount({ animated: false });
         el.setAttribute("font-weight", "700");
+        await Promise.resolve();
         expect(label(el).getAttribute("font-weight")).toBe("700");
     });
 
-    it("disables animation when animated toggled to false after mount", () => {
+    it("disables animation when animated toggled to false after mount", async () => {
         el = mount({ animated: true });
         el.setAttribute("animated", "false");
+        await Promise.resolve();
         expect(arc(el).style.transition).toBe("none");
     });
 
-    it("switches size from auto back to numeric", () => {
+    it("switches size from auto back to numeric", async () => {
         el = mount({ size: "auto", animated: false });
         el.setAttribute("size", "120");
+        await Promise.resolve();
         expect(el.style.width).toBe("120px");
         expect(el.style.height).toBe("120px");
         expect(el.style.aspectRatio).toBe("");
@@ -1115,21 +1144,23 @@ describe("avatar", () => {
         expect(parseFloat(avatarImg(el).getAttribute("height"))).toBeCloseTo(60, 1);
     });
 
-    it("removing avatar hides image and restores label", () => {
+    it("removing avatar hides image and restores label", async () => {
         el = mount({
             avatar: "https://example.com/photo.jpg",
             value: 50,
             animated: false,
         });
         el.removeAttribute("avatar");
+        await Promise.resolve();
         expect(avatarImg(el).getAttribute("display")).toBe("none");
         expect(label(el).style.display).not.toBe("none");
         expect(label(el).textContent).toBe("50%");
     });
 
-    it("updating avatar changes the href", () => {
+    it("updating avatar changes the href", async () => {
         el = mount({ avatar: "https://example.com/old.jpg", animated: false });
         el.setAttribute("avatar", "https://example.com/new.jpg");
+        await Promise.resolve();
         expect(avatarImg(el).getAttribute("href")).toBe("https://example.com/new.jpg");
     });
 
@@ -1187,13 +1218,14 @@ describe("avatar", () => {
         expect(parseFloat(clipCircle(el).getAttribute("r"))).toBeCloseTo(38, 1);
     });
 
-    it("img-padding updates reactively", () => {
+    it("img-padding updates reactively", async () => {
         el = mount({
             avatar: "https://example.com/photo.jpg",
             thickness: 8,
             animated: false,
         });
         el.setAttribute("img-padding", "6");
+        await Promise.resolve();
         // innerR = 50 - 8 - 6 = 36
         expect(parseFloat(avatarImg(el).getAttribute("width"))).toBeCloseTo(72, 1);
         expect(parseFloat(clipCircle(el).getAttribute("r"))).toBeCloseTo(36, 1);
@@ -1242,11 +1274,12 @@ describe("lifecycle", () => {
         expect(arc(el).getAttribute("stroke")).toBe("#abcdef");
     });
 
-    it("attribute change after reconnect still updates the element", () => {
+    it("attribute change after reconnect still updates the element", async () => {
         el = mount({ value: 0, animated: false });
         el.remove();
         document.body.appendChild(el);
         el.setAttribute("value", "50");
+        await Promise.resolve();
         expect(label(el).textContent).toBe("50%");
     });
 });
@@ -1265,11 +1298,12 @@ describe("animation lifecycle", () => {
         expect(el._hasAnimated).toBeFalsy();
     });
 
-    it("subsequent value changes do not reset dashoffset to circ (no re-animation)", () => {
+    it("subsequent value changes do not reset dashoffset to circ (no re-animation)", async () => {
         // On an already-animated element, changing value sets dashoffset directly (no rAF)
         el = mount({ value: 100, animated: true });
         // _hasAnimated is now true; change value — dashoffset should update synchronously
         el.setAttribute("value", "50");
+        await Promise.resolve();
         const circ = circumference();
         // dashoffset should NOT be reset to circ (full circumference) as that's the animation start
         expect(parseFloat(arc(el).getAttribute("stroke-dashoffset"))).toBeCloseTo(
@@ -1278,17 +1312,17 @@ describe("animation lifecycle", () => {
         );
     });
 
-    it("attributes set synchronously after connection win over the initial rAF (framework compat)", () => {
+    it("attributes set synchronously after connection win over the initial rAF (framework compat)", async () => {
         // Regression: React/Vue set attributes via useEffect immediately after the element is
         // connected. The initial connectedCallback fires with value=0 and schedules a rAF that
         // would overwrite the arc offset. The rAF must be cancelled when _apply() is called again
         // before it fires, so the final arc position matches the real value, not 0.
         const el2 = document.createElement("progress-ring");
         document.body.appendChild(el2); // connectedCallback fires here with value=0, rAF queued
-        el2.setAttribute("value", "72"); // _apply() called again — should cancel the stale rAF
+        el2.setAttribute("value", "72"); // batched _apply() will cancel the stale rAF
         el2.setAttribute("animated", "true");
+        await Promise.resolve();
         // The stale rAF (arcOffset captured at value=0) must not overwrite the correct offset.
-        // After the synchronous setAttribute call the arc should already reflect value=72.
         expect(parseFloat(arc(el2).getAttribute("stroke-dashoffset"))).toBeCloseTo(
             expectedOffset(72),
             1,
@@ -1300,15 +1334,17 @@ describe("animation lifecycle", () => {
 // ── reactivity — clearing values ──────────────────────────────────────────────
 
 describe("reactivity — clearing values back to zero", () => {
-    it("clears padding when set back to 0", () => {
+    it("clears padding when set back to 0", async () => {
         el = mount({ padding: 16, animated: false });
         el.setAttribute("padding", "0");
+        await Promise.resolve();
         expect(el.style.padding).toBe("");
     });
 
-    it("clears border-radius when corner-radius set back to 0", () => {
+    it("clears border-radius when corner-radius set back to 0", async () => {
         el = mount({ "corner-radius": 16, animated: false });
         el.setAttribute("corner-radius", "0");
+        await Promise.resolve();
         expect(el.style.borderRadius).toBe("");
     });
 
@@ -1318,9 +1354,10 @@ describe("reactivity — clearing values back to zero", () => {
         expect(label(el).textContent).toBe("42%");
     });
 
-    it("restores default background when background-color removed", () => {
+    it("restores default background when background-color removed", async () => {
         el = mount({ "background-color": "#ff0000", animated: false });
         el.removeAttribute("background-color");
+        await Promise.resolve();
         expect(el.style.background).toBe("transparent");
     });
 });

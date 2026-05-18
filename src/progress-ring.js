@@ -81,7 +81,16 @@ class ProgressRing extends HTMLElement {
     }
 
     attributeChangedCallback() {
-        if (this._built) this._apply();
+        if (!this._built) return;
+        // Batch synchronous setAttribute bursts (e.g. from React/Vue wrappers that
+        // set all props at once) into a single _apply() via a microtask.
+        if (!this._applyScheduled) {
+            this._applyScheduled = true;
+            Promise.resolve().then(() => {
+                this._applyScheduled = false;
+                this._apply();
+            });
+        }
     }
 
     // ── helpers ────────────────────────────────────────────────────────────────
@@ -295,20 +304,25 @@ class ProgressRing extends HTMLElement {
         this._arc.setAttribute("stroke-dasharray", dashArray);
         this._arc.setAttribute("transform", rotate);
         // Arc stroke: linear gradient or flat primary colour
-        while (this._gradient.firstChild) this._gradient.removeChild(this._gradient.firstChild);
         const gradStops = linearGradient
             .split(",")
             .map((s) => s.trim())
             .filter(Boolean);
         if (gradStops.length >= 2) {
-            gradStops.forEach((color, i) => {
-                const stop = document.createElementNS(SVG_NS, "stop");
-                stop.setAttribute("offset", `${(i / (gradStops.length - 1)) * 100}%`);
-                stop.setAttribute("stop-color", color);
-                this._gradient.appendChild(stop);
-            });
+            // Only rebuild stop nodes when the gradient string actually changed.
+            if (linearGradient !== this._prevLinearGradient) {
+                this._prevLinearGradient = linearGradient;
+                while (this._gradient.firstChild) this._gradient.removeChild(this._gradient.firstChild);
+                gradStops.forEach((color, i) => {
+                    const stop = document.createElementNS(SVG_NS, "stop");
+                    stop.setAttribute("offset", `${(i / (gradStops.length - 1)) * 100}%`);
+                    stop.setAttribute("stop-color", color);
+                    this._gradient.appendChild(stop);
+                });
+            }
             this._arc.setAttribute("stroke", `url(#pc-gradient-${this._instanceId})`);
         } else {
+            this._prevLinearGradient = "";
             this._arc.setAttribute("stroke", primary);
         }
         const effectiveDuration = animationMode === "duration"

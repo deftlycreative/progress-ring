@@ -81,45 +81,53 @@ export default function ProgressRing({
     className,
 }: ProgressRingProps) {
     const ref = useRef<HTMLElement>(null);
+    const prevAttrsRef = useRef<Record<string, string | null>>({});
 
     useEffect(() => {
         const el = ref.current;
         if (!el) return;
-        el.setAttribute("value", String(value));
-        el.setAttribute("min", String(min));
-        el.setAttribute("max", String(max));
-        el.setAttribute("primary-color", primaryColor);
-        el.setAttribute("muted-color", mutedColor);
-        el.setAttribute("background-color", backgroundColor);
-        el.setAttribute("animated", String(animated));
-        el.setAttribute("animation-delay", String(animationDelay));
-        el.setAttribute("animation-duration", String(animationDuration));
-        el.setAttribute("animation-mode", animationMode);
-        el.setAttribute("thickness", String(thickness));
-        el.setAttribute("stroke-linecap", strokeLinecap);
-        el.setAttribute("direction", direction);
-        el.setAttribute("font-family", fontFamily);
-        el.setAttribute("font-size", String(fontSize));
-        el.setAttribute("font-weight", String(fontWeight));
-        if (labelColor) el.setAttribute("label-color", labelColor);
-        else el.removeAttribute("label-color");
-        if (avatar) el.setAttribute("avatar", avatar);
-        else el.removeAttribute("avatar");
-        el.setAttribute("img-padding", String(imgPadding));
-        el.setAttribute("cut", String(cut));
-        if (rotation !== undefined) el.setAttribute("rotation", String(rotation));
-        else el.removeAttribute("rotation");
-        if (trackThickness !== undefined)
-            el.setAttribute("track-thickness", String(trackThickness));
-        else el.removeAttribute("track-thickness");
-        if (linearGradient) el.setAttribute("linear-gradient", linearGradient);
-        else el.removeAttribute("linear-gradient");
-        el.setAttribute("label-format", labelFormat);
-        if (textOverride) el.setAttribute("text-override", textOverride);
-        else el.removeAttribute("text-override");
-        el.setAttribute("size", String(size));
-        el.setAttribute("padding", String(padding));
-        el.setAttribute("corner-radius", String(cornerRadius));
+
+        // Only call setAttribute/removeAttribute when the value has actually changed.
+        // This avoids triggering attributeChangedCallback (and a full re-render) for
+        // every prop on every render cycle — most renders only change `value`.
+        // null, undefined, and "" are all treated as "remove the attribute".
+        const setAttr = (name: string, value: string | null | undefined) => {
+            const normalized = value == null || value === "" ? null : value;
+            const prev = prevAttrsRef.current;
+            if (prev[name] === normalized) return;
+            prev[name] = normalized;
+            if (normalized === null) el.removeAttribute(name);
+            else el.setAttribute(name, normalized);
+        };
+
+        setAttr("value", String(value));
+        setAttr("min", String(min));
+        setAttr("max", String(max));
+        setAttr("primary-color", primaryColor);
+        setAttr("muted-color", mutedColor);
+        setAttr("background-color", backgroundColor);
+        setAttr("animated", String(animated));
+        setAttr("animation-delay", String(animationDelay));
+        setAttr("animation-duration", String(animationDuration));
+        setAttr("animation-mode", animationMode);
+        setAttr("thickness", String(thickness));
+        setAttr("stroke-linecap", strokeLinecap);
+        setAttr("direction", direction);
+        setAttr("font-family", fontFamily);
+        setAttr("font-size", String(fontSize));
+        setAttr("font-weight", String(fontWeight));
+        setAttr("label-color", labelColor);
+        setAttr("avatar", avatar);
+        setAttr("img-padding", String(imgPadding));
+        setAttr("cut", String(cut));
+        setAttr("rotation", rotation !== undefined ? String(rotation) : null);
+        setAttr("track-thickness", trackThickness !== undefined ? String(trackThickness) : null);
+        setAttr("linear-gradient", linearGradient);
+        setAttr("label-format", labelFormat);
+        setAttr("text-override", textOverride);
+        setAttr("size", String(size));
+        setAttr("padding", String(padding));
+        setAttr("corner-radius", String(cornerRadius));
     }, [
         value,
         min,
