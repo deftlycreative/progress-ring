@@ -174,7 +174,9 @@ class ProgressRing extends HTMLElement {
         const svg = document.createElementNS(SVG_NS, "svg");
         svg.setAttribute("viewBox", "0 0 100 100");
         svg.setAttribute("xmlns", SVG_NS);
-        svg.setAttribute("role", "img");
+        // The host element carries the progressbar role and all ARIA state.
+        // Mark the inner SVG as presentational so AT doesn't double-announce it.
+        svg.setAttribute("aria-hidden", "true");
 
         const mkCircle = (cls) => {
             const el = document.createElementNS(SVG_NS, "circle");
@@ -226,6 +228,10 @@ class ProgressRing extends HTMLElement {
 
         svg.append(defs, this._track, this._arc, this._label, this._avatarImg);
         this.shadowRoot.append(style, svg);
+        // Host element semantics — set once and never changed by _apply().
+        this.setAttribute("role", "progressbar");
+        this.setAttribute("aria-valuemin", "0");
+        this.setAttribute("aria-valuemax", "100");
         this._built = true;
     }
 
@@ -234,6 +240,7 @@ class ProgressRing extends HTMLElement {
     _apply() {
         const {
             value,
+            min,
             max,
             percent,
             primary,
@@ -271,7 +278,20 @@ class ProgressRing extends HTMLElement {
         // needed when cut>0 to create the physical gap at the bottom of a gauge.
         const dashArray = cut > 0 ? `${availableCirc} ${circ - availableCirc}` : `${availableCirc}`;
 
-        this._svg.setAttribute("aria-label", `${Math.round(percent)}% complete`);
+        // ── ARIA state on the host element ────────────────────────────────────────
+        this.setAttribute("aria-valuenow", String(Math.round(value)));
+        this.setAttribute("aria-valuemin", String(min));
+        this.setAttribute("aria-valuemax", String(max));
+        // aria-label: auto-generate a description unless the consumer has set
+        // their own (e.g. "Download progress").  We track what we last generated
+        // so that a consumer-provided label won't be stomped on future _apply()
+        // calls, while still updating correctly when the percent changes.
+        const generatedLabel = `${Math.round(percent)}% complete`;
+        const currentLabel = this.getAttribute("aria-label");
+        if (currentLabel === null || currentLabel === this._lastGeneratedAriaLabel) {
+            this._lastGeneratedAriaLabel = generatedLabel;
+            this.setAttribute("aria-label", generatedLabel);
+        }
         if (size === "auto") {
             this.style.width = "100%";
             this.style.height = "auto";

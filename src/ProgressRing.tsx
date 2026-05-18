@@ -38,6 +38,8 @@ export interface ProgressRingProps {
     size?: number | "auto";
     padding?: number;
     cornerRadius?: number;
+    /** Accessible label for the progress ring (e.g. "Download progress"). Defaults to "N% complete". */
+    ariaLabel?: string;
     style?: CSSProperties;
     className?: string;
 }
@@ -77,6 +79,7 @@ export default function ProgressRing({
     rotation,
     trackThickness,
     linearGradient,
+    ariaLabel,
     style,
     className,
 }: ProgressRingProps) {
@@ -128,6 +131,7 @@ export default function ProgressRing({
         setAttr("size", String(size));
         setAttr("padding", String(padding));
         setAttr("corner-radius", String(cornerRadius));
+        setAttr("aria-label", ariaLabel);
     }, [
         value,
         min,
@@ -157,6 +161,7 @@ export default function ProgressRing({
         size,
         padding,
         cornerRadius,
+        ariaLabel,
     ]);
 
     return <progress-ring ref={ref} style={style} class={className} />;

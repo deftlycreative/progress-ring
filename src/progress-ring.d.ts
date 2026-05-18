@@ -67,6 +67,12 @@ export interface ProgressRingAttributes {
     "track-thickness"?: number | string;
     /** 2+ comma-separated colours for a linear gradient arc stroke, e.g. "#ff0000,#0000ff" */
     "linear-gradient"?: string;
+    /**
+     * Accessible label for the progress ring.
+     * When set, overrides the auto-generated "N% complete" description.
+     * Example: "Download progress", "Profile completion"
+     */
+    "aria-label"?: string;
 }
 
 export interface ProgressRingElement extends HTMLElement, ProgressRingAttributes {}

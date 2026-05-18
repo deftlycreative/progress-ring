@@ -299,4 +299,25 @@ describe("ProgressRing (React wrapper)", () => {
         await act(async () => {});
         expect(getEl(container).hasAttribute("linear-gradient")).toBe(false);
     });
+
+    it("sets aria-label attribute when ariaLabel prop is provided", async () => {
+        const { container } = render(<ProgressRing ariaLabel="Download progress" />);
+        await act(async () => {});
+        expect(getEl(container).getAttribute("aria-label")).toBe("Download progress");
+    });
+
+    it("uses auto-generated aria-label when ariaLabel prop is not provided", async () => {
+        const { container } = render(<ProgressRing value={72} />);
+        await act(async () => {});
+        // The web component auto-generates "N% complete" when no ariaLabel is given
+        expect(getEl(container).getAttribute("aria-label")).toBe("72% complete");
+    });
+
+    it("updates aria-label attribute when ariaLabel prop changes", async () => {
+        const { container, rerender } = render(<ProgressRing ariaLabel="Upload progress" />);
+        await act(async () => {});
+        rerender(<ProgressRing ariaLabel="Profile completion" />);
+        await act(async () => {});
+        expect(getEl(container).getAttribute("aria-label")).toBe("Profile completion");
+    });
 });

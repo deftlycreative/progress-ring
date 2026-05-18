@@ -292,4 +292,21 @@ describe("ProgressRing (Vue wrapper)", () => {
         const wrapper = mount(ProgressRing);
         expect(wrapper.element.hasAttribute("linear-gradient")).toBe(false);
     });
+
+    it("sets aria-label attribute when ariaLabel prop is provided", () => {
+        const wrapper = mount(ProgressRing, { props: { ariaLabel: "Download progress" } });
+        expect(wrapper.element.getAttribute("aria-label")).toBe("Download progress");
+    });
+
+    it("removes aria-label attribute when ariaLabel prop is null", () => {
+        const wrapper = mount(ProgressRing, { props: { ariaLabel: null } });
+        // null prop → attribute removed; the web component will set the auto-generated label
+        expect(wrapper.element.hasAttribute("aria-label")).toBe(false);
+    });
+
+    it("updates aria-label attribute when ariaLabel prop changes", async () => {
+        const wrapper = mount(ProgressRing, { props: { ariaLabel: "Upload progress" } });
+        await wrapper.setProps({ ariaLabel: "Profile completion" });
+        expect(wrapper.element.getAttribute("aria-label")).toBe("Profile completion");
+    });
 });

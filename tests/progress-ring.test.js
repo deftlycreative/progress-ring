@@ -50,9 +50,14 @@ describe("DOM structure", () => {
         expect(svgEl(el).getAttribute("viewBox")).toBe("0 0 100 100");
     });
 
-    it('SVG has role="img"', () => {
+    it('SVG has aria-hidden="true"', () => {
         el = mount();
-        expect(svgEl(el).getAttribute("role")).toBe("img");
+        expect(svgEl(el).getAttribute("aria-hidden")).toBe("true");
+    });
+
+    it('host has role="progressbar"', () => {
+        el = mount();
+        expect(el.getAttribute("role")).toBe("progressbar");
     });
 
     it("renders a track circle", () => {
@@ -109,48 +114,123 @@ describe("DOM structure", () => {
 describe("value / min / max computation", () => {
     it("defaults to 0% with no attributes", () => {
         el = mount({ animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("0% complete");
+        expect(el.getAttribute("aria-label")).toBe("0% complete");
     });
 
     it("uses value as percent when min=0 max=100 (defaults)", () => {
         el = mount({ value: 72, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("72% complete");
+        expect(el.getAttribute("aria-label")).toBe("72% complete");
     });
 
     it("computes percent from value and max", () => {
         el = mount({ value: 3, max: 4, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("75% complete");
+        expect(el.getAttribute("aria-label")).toBe("75% complete");
     });
 
     it("computes percent from value, min, and max", () => {
         el = mount({ value: 15, min: 10, max: 20, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("50% complete");
+        expect(el.getAttribute("aria-label")).toBe("50% complete");
     });
 
     it("clamps value below min to 0%", () => {
         el = mount({ value: -5, min: 0, max: 100, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("0% complete");
+        expect(el.getAttribute("aria-label")).toBe("0% complete");
     });
 
     it("clamps value above max to 100%", () => {
         el = mount({ value: 200, min: 0, max: 100, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("100% complete");
+        expect(el.getAttribute("aria-label")).toBe("100% complete");
     });
 
     it("handles value equal to min (0%)", () => {
         el = mount({ value: 0, min: 0, max: 100, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("0% complete");
+        expect(el.getAttribute("aria-label")).toBe("0% complete");
     });
 
     it("handles value equal to max (100%)", () => {
         el = mount({ value: 100, min: 0, max: 100, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("100% complete");
+        expect(el.getAttribute("aria-label")).toBe("100% complete");
     });
 
     it("aria-label uses rounded percent for non-integer results", () => {
         // 1/3 = 33.33...% → aria-label should say "33% complete"
         el = mount({ value: 1, max: 3, animated: false });
-        expect(svgEl(el).getAttribute("aria-label")).toBe("33% complete");
+        expect(el.getAttribute("aria-label")).toBe("33% complete");
+    });
+});
+
+// ── accessibility ───────────────────────────────────────────────────────────────────
+
+describe("accessibility", () => {
+    it('host has role="progressbar"', () => {
+        el = mount({ value: 50, animated: false });
+        expect(el.getAttribute("role")).toBe("progressbar");
+    });
+
+    it('SVG inside shadow root has aria-hidden="true"', () => {
+        el = mount({ value: 50, animated: false });
+        expect(svgEl(el).getAttribute("aria-hidden")).toBe("true");
+    });
+
+    it("aria-valuenow reflects current value", () => {
+        el = mount({ value: 72, animated: false });
+        expect(el.getAttribute("aria-valuenow")).toBe("72");
+    });
+
+    it("aria-valuemin reflects min attribute", () => {
+        el = mount({ value: 15, min: 10, max: 20, animated: false });
+        expect(el.getAttribute("aria-valuemin")).toBe("10");
+    });
+
+    it("aria-valuemax reflects max attribute", () => {
+        el = mount({ value: 15, min: 10, max: 20, animated: false });
+        expect(el.getAttribute("aria-valuemax")).toBe("20");
+    });
+
+    it("aria-valuenow defaults to 0 and aria-valuemin/max to 0/100", () => {
+        el = mount({ animated: false });
+        expect(el.getAttribute("aria-valuenow")).toBe("0");
+        expect(el.getAttribute("aria-valuemin")).toBe("0");
+        expect(el.getAttribute("aria-valuemax")).toBe("100");
+    });
+
+    it("auto-generates aria-label as 'N% complete'", () => {
+        el = mount({ value: 72, animated: false });
+        expect(el.getAttribute("aria-label")).toBe("72% complete");
+    });
+
+    it("consumer-provided aria-label is preserved", () => {
+        el = mount({ value: 72, "aria-label": "Download progress", animated: false });
+        expect(el.getAttribute("aria-label")).toBe("Download progress");
+    });
+
+    it("consumer aria-label is not overwritten when value changes", async () => {
+        el = mount({ value: 50, "aria-label": "Upload progress", animated: false });
+        el.setAttribute("value", "80");
+        await Promise.resolve();
+        expect(el.getAttribute("aria-label")).toBe("Upload progress");
+    });
+
+    it("auto-generated aria-label updates when value changes", async () => {
+        el = mount({ value: 50, animated: false });
+        el.setAttribute("value", "80");
+        await Promise.resolve();
+        expect(el.getAttribute("aria-label")).toBe("80% complete");
+    });
+
+    it("removing consumer aria-label restores auto-generated label", async () => {
+        el = mount({ value: 72, "aria-label": "Download progress", animated: false });
+        el.removeAttribute("aria-label");
+        el.setAttribute("value", "80"); // trigger _apply()
+        await Promise.resolve();
+        expect(el.getAttribute("aria-label")).toBe("80% complete");
+    });
+
+    it("aria-valuenow updates reactively when value changes", async () => {
+        el = mount({ value: 50, animated: false });
+        el.setAttribute("value", "80");
+        await Promise.resolve();
+        expect(el.getAttribute("aria-valuenow")).toBe("80");
     });
 });
 
@@ -896,7 +976,7 @@ describe("reactivity (attribute changes after mount)", () => {
         el = mount({ value: 0, animated: false });
         el.setAttribute("value", "80");
         await Promise.resolve();
-        expect(svgEl(el).getAttribute("aria-label")).toBe("80% complete");
+        expect(el.getAttribute("aria-label")).toBe("80% complete");
     });
 
     it("updates dashoffset when value changes", async () => {
@@ -1000,7 +1080,7 @@ describe("reactivity (attribute changes after mount)", () => {
         // raise min to 10 → (60-10)/(100-10)*100 = 55.55...% ≈ 56%
         el.setAttribute("min", "10");
         await Promise.resolve();
-        expect(svgEl(el).getAttribute("aria-label")).toBe("56% complete");
+        expect(el.getAttribute("aria-label")).toBe("56% complete");
     });
 
     it("updates max and recomputes percent", async () => {
@@ -1009,7 +1089,7 @@ describe("reactivity (attribute changes after mount)", () => {
         // lower max to 50 → 100%
         el.setAttribute("max", "50");
         await Promise.resolve();
-        expect(svgEl(el).getAttribute("aria-label")).toBe("100% complete");
+        expect(el.getAttribute("aria-label")).toBe("100% complete");
     });
 
     it("updates label fill when label-color changes", async () => {
@@ -1240,7 +1320,7 @@ describe("lifecycle", () => {
         el.setAttribute("value", "60");
         el.setAttribute("animated", "false");
         document.body.appendChild(el);
-        expect(svgEl(el).getAttribute("aria-label")).toBe("60% complete");
+        expect(el.getAttribute("aria-label")).toBe("60% complete");
     });
 
     it("applies primary-color set before connection", () => {

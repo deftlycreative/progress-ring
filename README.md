@@ -23,7 +23,7 @@ A lightweight, scalable circular progress bar built as a Web Component. Works in
 - Gauge/speedometer mode via `cut` + `rotation`
 - Linear gradient arc stroke
 - Avatar image inside the circle (replaces the label)
-- Accessible (`role="img"` + `aria-label`)
+- Accessible (`role="progressbar"` + `aria-valuenow/min/max` + customisable `aria-label`)
 - Shadow DOM encapsulation prevents style conflicts
 
 ---
@@ -220,6 +220,41 @@ The percentage is computed internally as `(value - min) / (max - min) * 100`, cl
 |---|---|---|---|---|
 | `avatar` | `avatar` | string | — | URL of an image to display inside the circle. Replaces the text label. The image is clipped to a circle that fits inside the arc |
 | `img-padding` | `imgPadding` | number | `0` | Gap in SVG units between the avatar image edge and the inner wall of the arc |
+
+### Accessibility
+
+The component is a `role="progressbar"` element and automatically maintains the following ARIA attributes on the host:
+
+| Attribute | Value |
+|---|---|
+| `role` | `progressbar` |
+| `aria-valuenow` | Current `value` (rounded to the nearest integer) |
+| `aria-valuemin` | Current `min` |
+| `aria-valuemax` | Current `max` |
+| `aria-label` | `"N% complete"` (auto-generated; see below) |
+
+By default `aria-label` is auto-generated as `"N% complete"`. Pass `aria-label` (HTML/Vue) or `ariaLabel` (React/Vue) to provide a more meaningful description:
+
+```html
+<!-- HTML -->
+<progress-ring value="72" aria-label="Download progress"></progress-ring>
+```
+
+```jsx
+{/* React */}
+<ProgressRing value={72} ariaLabel="Download progress" />
+```
+
+```vue
+<!-- Vue -->
+<ProgressRing :value="72" aria-label="Download progress" />
+```
+
+Once set, your custom label is never overwritten by the component — even as `value` changes. Remove the attribute to revert to the auto-generated label.
+
+| HTML Attribute | React/Vue Prop | Type | Default | Description |
+|---|---|---|---|---|
+| `aria-label` | `ariaLabel` | string | *(auto-generated)* | Accessible label for the ring. Defaults to `"N% complete"` |
 
 ---
 

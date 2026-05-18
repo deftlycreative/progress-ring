@@ -35,6 +35,7 @@ const props = defineProps({
     size: { type: [Number, String], default: 100 },
     padding: { type: Number, default: 0 },
     cornerRadius: { type: Number, default: 0 },
+    ariaLabel: { type: String, default: null },
 });
 
 const elRef = ref(null);
@@ -84,5 +85,6 @@ watchEffect(() => {
     setAttr("size", props.size);
     setAttr("padding", props.padding);
     setAttr("corner-radius", props.cornerRadius);
+    setAttr("aria-label", props.ariaLabel);
 }, { flush: "sync" });
 </script>
