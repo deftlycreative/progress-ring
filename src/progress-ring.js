@@ -370,7 +370,12 @@ class ProgressRing extends HTMLElement {
             cancelAnimationFrame(this._animRaf);
             this._animRaf = undefined;
         }
-        if (animated && !this._hasAnimated) {
+        // Only animate if there is something visible to sweep to (percent > 0).
+        // When frameworks (Vue, React) first connect the element before setting
+        // attributes, percent is 0 from the default value — skipping the animation
+        // here keeps _hasAnimated false so the next _apply() with real props can
+        // run the sweep.
+        if (animated && !this._hasAnimated && percent > 0) {
             this._arc.setAttribute("stroke-dashoffset", availableCirc);
             this._animRaf = requestAnimationFrame(() => {
                 this._animRaf = requestAnimationFrame(() => {

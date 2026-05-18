@@ -27,8 +27,8 @@
   ],
   "scripts": {
     "dev": "vite --open /examples/index.html",
-    "dev:vue": "vite --root examples --config vite.config.js vue-demo.html --open",
-    "dev:react": "vite --root examples --config vite.config.js react-demo.html --open",
+    "dev:vue": "vite examples --config vite.config.js --open /vue-demo.html",
+    "dev:react": "vite examples --config vite.config.js --open /react-demo.html",
     "build": "vite build",
     "test": "vitest",
     "test:run": "vitest run",

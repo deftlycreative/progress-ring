@@ -1,40 +1,12 @@
 <template>
-    <progress-ring
-        :value="String(value)"
-        :min="String(min)"
-        :max="String(max)"
-        :primary-color="primaryColor"
-        :muted-color="mutedColor"
-        :background-color="backgroundColor"
-        :animated="String(animated)"
-        :animation-delay="String(animationDelay)"
-        :animation-duration="String(animationDuration)"
-        :animation-mode="animationMode"
-        :thickness="String(thickness)"
-        :stroke-linecap="strokeLinecap"
-        :direction="direction"
-        :font-family="fontFamily"
-        :font-size="String(fontSize)"
-        :font-weight="String(fontWeight)"
-        :label-color="labelColor"
-        :label-format="labelFormat"
-        :text-override="textOverride"
-        :avatar="avatar"
-        :img-padding="String(imgPadding)"
-        :cut="String(cut)"
-        :rotation="rotation !== null ? String(rotation) : null"
-        :track-thickness="trackThickness !== null ? String(trackThickness) : null"
-        :linear-gradient="linearGradient"
-        :size="String(size)"
-        :padding="String(padding)"
-        :corner-radius="String(cornerRadius)"
-    />
+    <progress-ring ref="elRef" />
 </template>
 
 <script setup>
+import { ref, watchEffect } from "vue";
 import "./progress-ring.js";
 
-defineProps({
+const props = defineProps({
     value: { type: Number, default: 0 },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
@@ -44,7 +16,7 @@ defineProps({
     animated: { type: Boolean, default: true },
     animationDelay: { type: Number, default: 0 },
     animationDuration: { type: Number, default: 600 },
-    animationMode: { type: String, default: 'speed' },
+    animationMode: { type: String, default: "speed" },
     thickness: { type: Number, default: 8 },
     strokeLinecap: { type: String, default: "round" },
     direction: { type: String, default: "clockwise" },
@@ -64,4 +36,53 @@ defineProps({
     padding: { type: Number, default: 0 },
     cornerRadius: { type: Number, default: 0 },
 });
+
+const elRef = ref(null);
+const prevAttrs = {};
+
+// flush:'sync' ensures attributes are set immediately when elRef is assigned
+// (during the DOM patch) and whenever props change — no extra tick required.
+watchEffect(() => {
+    const el = elRef.value;
+    if (!el) return;
+
+    // null, undefined, and "" are all treated as "remove the attribute".
+    // prevAttrs guards against calling setAttribute for unchanged values.
+    const setAttr = (name, value) => {
+        const normalized = value == null || value === "" ? null : String(value);
+        if (prevAttrs[name] === normalized) return;
+        prevAttrs[name] = normalized;
+        if (normalized === null) el.removeAttribute(name);
+        else el.setAttribute(name, normalized);
+    };
+
+    setAttr("value", props.value);
+    setAttr("min", props.min);
+    setAttr("max", props.max);
+    setAttr("primary-color", props.primaryColor);
+    setAttr("muted-color", props.mutedColor);
+    setAttr("background-color", props.backgroundColor);
+    setAttr("animated", props.animated);
+    setAttr("animation-delay", props.animationDelay);
+    setAttr("animation-duration", props.animationDuration);
+    setAttr("animation-mode", props.animationMode);
+    setAttr("thickness", props.thickness);
+    setAttr("stroke-linecap", props.strokeLinecap);
+    setAttr("direction", props.direction);
+    setAttr("font-family", props.fontFamily);
+    setAttr("font-size", props.fontSize);
+    setAttr("font-weight", props.fontWeight);
+    setAttr("label-color", props.labelColor);
+    setAttr("label-format", props.labelFormat);
+    setAttr("text-override", props.textOverride);
+    setAttr("avatar", props.avatar);
+    setAttr("img-padding", props.imgPadding);
+    setAttr("cut", props.cut);
+    setAttr("rotation", props.rotation);
+    setAttr("track-thickness", props.trackThickness);
+    setAttr("linear-gradient", props.linearGradient);
+    setAttr("size", props.size);
+    setAttr("padding", props.padding);
+    setAttr("corner-radius", props.cornerRadius);
+}, { flush: "sync" });
 </script>

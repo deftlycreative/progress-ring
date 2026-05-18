@@ -1288,8 +1288,9 @@ describe("lifecycle", () => {
 
 describe("animation lifecycle", () => {
     it("_hasAnimated flag is set after first animated mount", () => {
-        el = mount({ animated: true });
-        // After initial connection, _hasAnimated should be true preventing re-animation
+        el = mount({ value: 50, animated: true });
+        // After initial connection with a non-zero value, _hasAnimated should be true
+        // preventing re-animation on subsequent prop changes.
         expect(el._hasAnimated).toBe(true);
     });
 
@@ -1313,16 +1314,17 @@ describe("animation lifecycle", () => {
     });
 
     it("attributes set synchronously after connection win over the initial rAF (framework compat)", async () => {
-        // Regression: React/Vue set attributes via useEffect immediately after the element is
-        // connected. The initial connectedCallback fires with value=0 and schedules a rAF that
-        // would overwrite the arc offset. The rAF must be cancelled when _apply() is called again
-        // before it fires, so the final arc position matches the real value, not 0.
+        // Regression: React/Vue may set some attributes before connectedCallback fires
+        // (e.g. Vue scope-id), causing _apply() to run with value=0. Because percent=0
+        // the animation is skipped and _hasAnimated stays false. The microtask-batched
+        // _apply() with the real attrs then runs the animation. We use animated=false
+        // so the final dashoffset is set directly (no rAF), making it easy to assert.
         const el2 = document.createElement("progress-ring");
-        document.body.appendChild(el2); // connectedCallback fires here with value=0, rAF queued
-        el2.setAttribute("value", "72"); // batched _apply() will cancel the stale rAF
-        el2.setAttribute("animated", "true");
+        document.body.appendChild(el2); // connectedCallback fires, value=0 → no animation
+        el2.setAttribute("value", "72");
+        el2.setAttribute("animated", "false"); // no animation → dashoffset set directly in microtask
         await Promise.resolve();
-        // The stale rAF (arcOffset captured at value=0) must not overwrite the correct offset.
+        // dashoffset must reflect value=72, not the stale value=0 render.
         expect(parseFloat(arc(el2).getAttribute("stroke-dashoffset"))).toBeCloseTo(
             expectedOffset(72),
             1,
