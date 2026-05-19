@@ -191,6 +191,7 @@ class ProgressRing extends HTMLElement {
             const el = document.createElementNS(SVG_NS, "circle");
             el.setAttribute("cx", "50");
             el.setAttribute("cy", "50");
+            el.setAttribute("fill", "none");
             if (cls) el.setAttribute("class", cls);
             return el;
         };
@@ -237,16 +238,24 @@ class ProgressRing extends HTMLElement {
 
         svg.append(defs, this._track, this._arc, this._label, this._avatarImg);
         this.shadowRoot.append(style, svg);
-        // Host element semantics — set once and never changed by _apply().
+        // Host element semantics — role is set once and never changed by _apply().
+        // aria-valuemin/max are set by the first _apply() call using the actual min/max props.
         this.setAttribute("role", "progressbar");
-        this.setAttribute("aria-valuemin", "0");
-        this.setAttribute("aria-valuemax", "100");
         this._built = true;
     }
 
     // ── apply current props to cached elements ─────────────────────────────────
 
     _apply() {
+        const p = this._getProps();
+        const o = this._prevProps;
+        this._prevProps = p;
+        // ch(...keys) — returns true on first call (no previous state) or whenever
+        // any of the listed prop keys changed value since the last _apply().
+        // This lets each DOM-write group be skipped when its inputs are unchanged,
+        // which matters for components updated frequently (e.g. live counters) or
+        // rendered inside React/Vue trees that re-render for unrelated reasons.
+        const ch = o === undefined ? () => true : (...keys) => keys.some(k => p[k] !== o[k]);
         const {
             value,
             min,
@@ -277,7 +286,7 @@ class ProgressRing extends HTMLElement {
             rotation,
             trackThickness,
             linearGradient,
-        } = this._getProps();
+        } = p;
         const r = (100 - thickness) / 2;
         const circ = 2 * Math.PI * r;
         const availableCirc = circ * (1 - cut / 100);
@@ -287,116 +296,139 @@ class ProgressRing extends HTMLElement {
         // needed when cut>0 to create the physical gap at the bottom of a gauge.
         const dashArray = cut > 0 ? `${availableCirc} ${circ - availableCirc}` : `${availableCirc}`;
 
-        // ── ARIA state on the host element ────────────────────────────────────────
-        this.setAttribute("aria-valuenow", String(Math.round(value)));
-        this.setAttribute("aria-valuemin", String(min));
-        this.setAttribute("aria-valuemax", String(max));
-        // aria-label: auto-generate a description unless the consumer has set
-        // their own (e.g. "Download progress").  We track what we last generated
-        // so that a consumer-provided label won't be stomped on future _apply()
-        // calls, while still updating correctly when the percent changes.
-        const generatedLabel = `${Math.round(percent)}% complete`;
-        const currentLabel = this.getAttribute("aria-label");
-        if (currentLabel === null || currentLabel === this._lastGeneratedAriaLabel) {
-            this._lastGeneratedAriaLabel = generatedLabel;
-            this.setAttribute("aria-label", generatedLabel);
-        }
-        if (size === "auto") {
-            this.style.width = "100%";
-            this.style.height = "auto";
-            this.style.aspectRatio = "1";
-        } else {
-            this.style.width = `${size}px`;
-            this.style.height = `${size}px`;
-            this.style.aspectRatio = "";
-        }
-        this.style.background = bg;
-        this.style.padding = padding ? `${padding}px` : "";
-        this.style.borderRadius = cornerRadius ? `${cornerRadius}px` : "";
-
-        const rotate =
-            direction === "counter-clockwise"
-                ? `rotate(${rotation + 180}, 50, 50) scale(-1, 1) translate(-100, 0)`
-                : `rotate(${rotation}, 50, 50)`;
-
-        this._track.setAttribute("r", r);
-        this._track.setAttribute("fill", "none");
-        this._track.setAttribute("stroke", muted);
-        this._track.setAttribute("stroke-width", trackThickness);
-        this._track.setAttribute("stroke-dasharray", dashArray);
-        this._track.setAttribute("transform", rotate);
-
-        this._arc.setAttribute("r", r);
-        this._arc.setAttribute("fill", "none");
-        this._arc.setAttribute("stroke-width", thickness);
-        this._arc.setAttribute("stroke-linecap", strokeLinecap);
-        this._arc.setAttribute("stroke-dasharray", dashArray);
-        this._arc.setAttribute("transform", rotate);
-        // Arc stroke: linear gradient or flat primary colour
-        const gradStops = linearGradient
-            .split(",")
-            .map((s) => s.trim())
-            .filter(Boolean);
-        if (gradStops.length >= 2) {
-            // Only rebuild stop nodes when the gradient string actually changed.
-            if (linearGradient !== this._prevLinearGradient) {
-                this._prevLinearGradient = linearGradient;
-                while (this._gradient.firstChild) this._gradient.removeChild(this._gradient.firstChild);
-                gradStops.forEach((color, i) => {
-                    const stop = document.createElementNS(SVG_NS, "stop");
-                    stop.setAttribute("offset", `${(i / (gradStops.length - 1)) * 100}%`);
-                    stop.setAttribute("stop-color", color);
-                    this._gradient.appendChild(stop);
-                });
+        // ── ARIA state ────────────────────────────────────────────────────────────
+        if (ch("value", "min", "max")) {
+            this.setAttribute("aria-valuenow", String(Math.round(value)));
+            if (ch("min")) this.setAttribute("aria-valuemin", String(min));
+            if (ch("max")) this.setAttribute("aria-valuemax", String(max));
+            // aria-label: auto-generate a description unless the consumer has set
+            // their own (e.g. "Download progress").  We track what we last generated
+            // so that a consumer-provided label won't be stomped on future _apply()
+            // calls, while still updating correctly when the percent changes.
+            const generatedLabel = `${Math.round(percent)}% complete`;
+            const currentLabel = this.getAttribute("aria-label");
+            if (currentLabel === null || currentLabel === this._lastGeneratedAriaLabel) {
+                this._lastGeneratedAriaLabel = generatedLabel;
+                this.setAttribute("aria-label", generatedLabel);
             }
-            this._arc.setAttribute("stroke", `url(#pc-gradient-${this._instanceId})`);
-        } else {
-            this._prevLinearGradient = "";
-            this._arc.setAttribute("stroke", primary);
         }
-        const effectiveDuration = animationMode === "duration"
-            ? animationDuration
-            : animationDuration * (percent / 100);
-        this._arc.style.transition = animated
-            ? `stroke-dashoffset ${effectiveDuration}ms ease ${animationDelay}ms`
-            : "none";
 
-        this._label.setAttribute("fill", labelColor);
-        this._label.setAttribute("font-family", fontFamily);
-        this._label.setAttribute("font-size", fontSize);
-        this._label.setAttribute("font-weight", fontWeight);
-        const labelText = (() => {
-            if (textOverride) return textOverride;
-            if (labelFormat === "none") return "";
-            if (labelFormat === "fraction") return `${value}/${max}`;
-            if (labelFormat === "value") return `${value}`;
-            if (labelFormat === "integer") return `${Math.round(percent)}`;
-            // Format-token template: any string containing {value}, {min}, {max},
-            // or {percent} is treated as a custom template.
-            if (labelFormat.includes("{"))
-                return labelFormat
-                    .replace("{value}", value)
-                    .replace("{min}", min)
-                    .replace("{max}", max)
-                    .replace("{percent}", Math.round(percent));
-            return `${Math.round(percent)}%`; // 'percent' default
-        })();
-        this._label.textContent = labelText;
+        // ── host style ────────────────────────────────────────────────────────────
+        if (ch("size")) {
+            if (size === "auto") {
+                this.style.width = "100%";
+                this.style.height = "auto";
+                this.style.aspectRatio = "1";
+            } else {
+                this.style.width = `${size}px`;
+                this.style.height = `${size}px`;
+                this.style.aspectRatio = "";
+            }
+        }
+        if (ch("bg")) this.style.background = bg;
+        if (ch("padding")) this.style.padding = padding ? `${padding}px` : "";
+        if (ch("cornerRadius")) this.style.borderRadius = cornerRadius ? `${cornerRadius}px` : "";
 
-        // Avatar vs label
-        const innerR = 50 - thickness - imgPadding;
-        if (avatar) {
-            this._avatarImg.setAttribute("href", avatar);
-            this._avatarImg.setAttribute("x", String(thickness + imgPadding));
-            this._avatarImg.setAttribute("y", String(thickness + imgPadding));
-            this._avatarImg.setAttribute("width", String(innerR * 2));
-            this._avatarImg.setAttribute("height", String(innerR * 2));
-            this._clipCircle.setAttribute("r", String(innerR));
-            this._avatarImg.removeAttribute("display");
-            this._label.style.display = "none";
-        } else {
-            this._avatarImg.setAttribute("display", "none");
-            this._label.style.display = "";
+        // ── track + arc geometry ──────────────────────────────────────────────────
+        if (ch("thickness", "cut", "direction", "rotation", "muted", "trackThickness", "strokeLinecap")) {
+            const rotate =
+                direction === "counter-clockwise"
+                    ? `rotate(${rotation + 180}, 50, 50) scale(-1, 1) translate(-100, 0)`
+                    : `rotate(${rotation}, 50, 50)`;
+            this._track.setAttribute("r", r);
+            this._track.setAttribute("stroke", muted);
+            this._track.setAttribute("stroke-width", trackThickness);
+            this._track.setAttribute("stroke-dasharray", dashArray);
+            this._track.setAttribute("transform", rotate);
+            this._arc.setAttribute("r", r);
+            this._arc.setAttribute("stroke-width", thickness);
+            this._arc.setAttribute("stroke-linecap", strokeLinecap);
+            this._arc.setAttribute("stroke-dasharray", dashArray);
+            this._arc.setAttribute("transform", rotate);
+        }
+
+        // ── arc stroke colour / gradient ──────────────────────────────────────────
+        if (ch("linearGradient", "primary")) {
+            const gradStops = linearGradient
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean);
+            if (gradStops.length >= 2) {
+                // Only rebuild stop nodes when the gradient string actually changed.
+                if (linearGradient !== this._prevLinearGradient) {
+                    this._prevLinearGradient = linearGradient;
+                    while (this._gradient.firstChild) this._gradient.removeChild(this._gradient.firstChild);
+                    gradStops.forEach((color, i) => {
+                        const stop = document.createElementNS(SVG_NS, "stop");
+                        stop.setAttribute("offset", `${(i / (gradStops.length - 1)) * 100}%`);
+                        stop.setAttribute("stop-color", color);
+                        this._gradient.appendChild(stop);
+                    });
+                }
+                this._arc.setAttribute("stroke", `url(#pc-gradient-${this._instanceId})`);
+            } else {
+                this._prevLinearGradient = "";
+                this._arc.setAttribute("stroke", primary);
+            }
+        }
+
+        // ── arc CSS transition ────────────────────────────────────────────────────
+        if (ch("animated", "animationMode", "animationDuration", "animationDelay", "percent")) {
+            const effectiveDuration = animationMode === "duration"
+                ? animationDuration
+                : animationDuration * (percent / 100);
+            this._arc.style.transition = animated
+                ? `stroke-dashoffset ${effectiveDuration}ms ease ${animationDelay}ms`
+                : "none";
+        }
+
+        // ── label style ───────────────────────────────────────────────────────────
+        if (ch("labelColor", "fontFamily", "fontSize", "fontWeight")) {
+            this._label.setAttribute("fill", labelColor);
+            this._label.setAttribute("font-family", fontFamily);
+            this._label.setAttribute("font-size", fontSize);
+            this._label.setAttribute("font-weight", fontWeight);
+        }
+
+        // ── label text ────────────────────────────────────────────────────────────
+        if (ch("textOverride", "labelFormat", "value", "min", "max", "percent")) {
+            const labelText = (() => {
+                if (textOverride) return textOverride;
+                if (labelFormat === "none") return "";
+                if (labelFormat === "fraction") return `${value}/${max}`;
+                if (labelFormat === "value") return `${value}`;
+                if (labelFormat === "integer") return `${Math.round(percent)}`;
+                // Format-token template: any string containing {value}, {min}, {max},
+                // or {percent} is treated as a custom template.
+                // replaceAll is used so that a token appearing more than once
+                // (e.g. "{value}/{value}") is fully substituted.
+                if (labelFormat.includes("{"))
+                    return labelFormat
+                        .replaceAll("{value}", value)
+                        .replaceAll("{min}", min)
+                        .replaceAll("{max}", max)
+                        .replaceAll("{percent}", Math.round(percent));
+                return `${Math.round(percent)}%`; // 'percent' default
+            })();
+            this._label.textContent = labelText;
+        }
+
+        // ── avatar ────────────────────────────────────────────────────────────────
+        if (ch("avatar", "thickness", "imgPadding")) {
+            const innerR = 50 - thickness - imgPadding;
+            if (avatar) {
+                this._avatarImg.setAttribute("href", avatar);
+                this._avatarImg.setAttribute("x", String(thickness + imgPadding));
+                this._avatarImg.setAttribute("y", String(thickness + imgPadding));
+                this._avatarImg.setAttribute("width", String(innerR * 2));
+                this._avatarImg.setAttribute("height", String(innerR * 2));
+                this._clipCircle.setAttribute("r", String(innerR));
+                this._avatarImg.removeAttribute("display");
+                this._label.style.display = "none";
+            } else {
+                this._avatarImg.setAttribute("display", "none");
+                this._label.style.display = "";
+            }
         }
 
         // Animate from 0 on first paint.

@@ -705,6 +705,11 @@ describe("label-format", () => {
         expect(label(el).textContent).toBe("5 of 10 — 50% (min 0)");
     });
 
+    it("label-format template: repeated token is replaced all occurrences", () => {
+        el = mount({ value: 3, max: 10, "label-format": "{value}/{value}", animated: false });
+        expect(label(el).textContent).toBe("3/3");
+    });
+
     it("label-format template: text-override still takes precedence", () => {
         el = mount({ value: 3, max: 10, "label-format": "{value} of {max}", "text-override": "custom", animated: false });
         expect(label(el).textContent).toBe("custom");
