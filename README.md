@@ -1,17 +1,15 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/logo-light.png">
-  <img src="./assets/logo-dark.png" alt="progress-ring" width="80">
-</picture>
-
 # progress-ring
 
 [![npm version](https://img.shields.io/npm/v/@deftlycreative/progress-ring)](https://www.npmjs.com/package/@deftlycreative/progress-ring)
 [![CI](https://github.com/deftlycreative/progress-ring/actions/workflows/ci.yml/badge.svg)](https://github.com/deftlycreative/progress-ring/actions/workflows/ci.yml)
 [![license](https://img.shields.io/npm/l/@deftlycreative/progress-ring)](./LICENSE)
+[![unpacked size](https://img.shields.io/npm/unpacked-size/@deftlycreative/progress-ring)](https://bundlephobia.com/package/@deftlycreative/progress-ring)
 
 A lightweight, scalable circular progress bar built as a Web Component. Works in plain HTML/PHP, Vue 3, and React with a single shared implementation — no framework dependencies required.
 
----
+<p align="center">
+  <img src="./assets/banner.png" alt="progress-ring — SVG Web Component with Vue 3 and React wrappers" width="900">
+</p>
 
 ## Features
 
