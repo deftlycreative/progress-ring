@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-18
+
+### Added
+
+- **Accessibility** — host element now carries `role="progressbar"`, `aria-valuenow`, `aria-valuemin`, and `aria-valuemax`; the inner SVG is marked `aria-hidden="true"` so screen readers don't double-announce it
+- `aria-label` attribute / `ariaLabel` prop — auto-generates `"N% complete"` by default; a consumer-provided value is preserved across re-renders and only overwritten when the auto-generated label is still in place
+- **`label-format` template strings** — any value containing `{` is treated as a format-token template; supported tokens: `{value}`, `{min}`, `{max}`, `{percent}` (e.g. `label-format="{value} of {max} tasks"`); tokens are replaced globally so a token may appear more than once
+- `disconnectedCallback` — cancels any in-flight `requestAnimationFrame` when the element is removed from the DOM, preventing stale closures from keeping a detached element alive
+
+### Fixed
+
+- Format-token substitution now uses `replaceAll` so a token that appears more than once in the template (e.g. `"{value}/{value}"`) is fully replaced instead of only the first occurrence
+
+### Performance
+
+- `_apply()` now diffs props against the previous call (`_prevProps`) and skips each DOM-write group when its inputs are unchanged; for the common hot path (only `value` updating), the ~25 track/arc/style attribute writes are skipped and only ARIA state, label text, and arc position are touched
+- `fill="none"` moved from `_apply()` to `_build()` so it is written once at construction rather than on every update
+
 ## [1.0.4] - 2026-05-14
 
 ### Added

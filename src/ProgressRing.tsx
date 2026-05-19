@@ -20,6 +20,12 @@ export interface ProgressRingProps {
     fontSize?: number;
     fontWeight?: number | string;
     labelColor?: string;
+    /**
+     * Named mode (`"percent"` | `"fraction"` | `"value"` | `"integer"` | `"none"`)
+     * or a format-token template string — e.g. `"{value} of {max} tasks"`.
+     * Available tokens: `{value}`, `{min}`, `{max}`, `{percent}` (rounded).
+     * Default: `"percent"`
+     */
     labelFormat?: "percent" | "fraction" | "value" | "integer" | "none" | (string & {});
     /** Override the label text entirely. When non-empty, replaces whatever labelFormat would show */
     textOverride?: string;

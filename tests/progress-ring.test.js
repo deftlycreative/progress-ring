@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import "../src/progress-ring.js";
 
 // ── helpers ──────────────────────────────────────────────────────────────────
@@ -1463,6 +1463,44 @@ describe("animation lifecycle", () => {
             1,
         );
         el2.remove();
+    });
+});
+
+// ── _prevProps diffing ────────────────────────────────────────────────────────
+
+describe("_prevProps diffing", () => {
+    it("changing only primary-color does not rewrite track geometry attributes", async () => {
+        el = mount({ value: 50, animated: false });
+        const trackEl = track(el);
+        const spy = vi.spyOn(trackEl, "setAttribute");
+        el.setAttribute("primary-color", "#ff0000");
+        await Promise.resolve();
+        // primary-color only affects the arc stroke group; track should be untouched
+        expect(spy).not.toHaveBeenCalled();
+    });
+
+    it("changing thickness does rewrite track geometry attributes", async () => {
+        el = mount({ value: 50, animated: false });
+        const trackEl = track(el);
+        const spy = vi.spyOn(trackEl, "setAttribute");
+        el.setAttribute("thickness", "12");
+        await Promise.resolve();
+        const calledNames = spy.mock.calls.map(([name]) => name);
+        expect(calledNames).toContain("r");
+        expect(calledNames).toContain("stroke-dasharray");
+    });
+
+    it("changing only value does not rewrite label font attributes", async () => {
+        el = mount({ value: 50, animated: false });
+        const labelEl = label(el);
+        const spy = vi.spyOn(labelEl, "setAttribute");
+        el.setAttribute("value", "75");
+        await Promise.resolve();
+        // label font group requires labelColor/fontFamily/fontSize/fontWeight to change
+        const calledNames = spy.mock.calls.map(([name]) => name);
+        expect(calledNames).not.toContain("font-family");
+        expect(calledNames).not.toContain("font-size");
+        expect(calledNames).not.toContain("font-weight");
     });
 });
 

@@ -24,6 +24,7 @@ const props = defineProps({
     fontSize: { type: Number, default: 20 },
     fontWeight: { type: [Number, String], default: 400 },
     labelColor: { type: String, default: null },
+    /** Named mode or format-token template using {value}, {min}, {max}, {percent} — e.g. "{value} of {max} tasks". Default: "percent" */
     labelFormat: { type: String, default: "percent" },
     textOverride: { type: String, default: null },
     avatar: { type: String, default: null },
