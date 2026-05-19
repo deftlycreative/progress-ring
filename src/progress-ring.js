@@ -371,6 +371,14 @@ class ProgressRing extends HTMLElement {
             if (labelFormat === "fraction") return `${value}/${max}`;
             if (labelFormat === "value") return `${value}`;
             if (labelFormat === "integer") return `${Math.round(percent)}`;
+            // Format-token template: any string containing {value}, {min}, {max},
+            // or {percent} is treated as a custom template.
+            if (labelFormat.includes("{"))
+                return labelFormat
+                    .replace("{value}", value)
+                    .replace("{min}", min)
+                    .replace("{max}", max)
+                    .replace("{percent}", Math.round(percent));
             return `${Math.round(percent)}%`; // 'percent' default
         })();
         this._label.textContent = labelText;

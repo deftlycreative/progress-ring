@@ -43,8 +43,15 @@ export interface ProgressRingAttributes {
     padding?: number | string;
     /** Host element border-radius in px. Default: 0 */
     "corner-radius"?: number | string;
-    /** What to display in the centre. Default: "percent" */
-    "label-format"?: "percent" | "fraction" | "value" | "integer" | "none";
+    /**
+     * What to display in the centre. Default: `"percent"`
+     *
+     * Named modes: `"percent"` | `"fraction"` | `"value"` | `"integer"` | `"none"`
+     *
+     * Or a format-token template string using any of:
+     * `{value}`, `{min}`, `{max}`, `{percent}` — e.g. `"{value} of {max} tasks"`
+     */
+    "label-format"?: "percent" | "fraction" | "value" | "integer" | "none" | (string & {});
     /** Override the label text entirely. When non-empty, replaces whatever label-format would show */
     "text-override"?: string;
     /** Label colour. Defaults to primary-color. */

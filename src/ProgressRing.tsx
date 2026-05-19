@@ -20,7 +20,7 @@ export interface ProgressRingProps {
     fontSize?: number;
     fontWeight?: number | string;
     labelColor?: string;
-    labelFormat?: "percent" | "fraction" | "value" | "integer" | "none";
+    labelFormat?: "percent" | "fraction" | "value" | "integer" | "none" | (string & {});
     /** Override the label text entirely. When non-empty, replaces whatever labelFormat would show */
     textOverride?: string;
     /** URL of an avatar image to display inside the circle instead of the label text */

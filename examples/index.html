@@ -270,6 +270,22 @@
 <span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
       </div>
 
+      <!-- ── format-token label ───────────────────────────────────────────── -->
+      <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
+        <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Format-token label</h2>
+        <div class="flex justify-center gap-6">
+          <progress-ring value="3" max="10" label-format="{value} of {max}" primary-color="#67e8f9" muted-color="#1e293b" font-size="16" animated="true"></progress-ring>
+          <progress-ring value="1" min="1" max="5" label-format="Step {value}/{max}" primary-color="#e879f9" muted-color="#1e293b" font-size="14" animated="true"></progress-ring>
+          <progress-ring value="7" max="10" label-format="{percent}% done" primary-color="#86efac" muted-color="#1e293b" font-size="14" animated="true"></progress-ring>
+        </div>
+        <p class="text-xs text-slate-400">Any <code class="text-slate-300">label-format</code> containing <code class="text-slate-300">{</code> is a template. Available tokens: <code class="text-slate-300">{value}</code>, <code class="text-slate-300">{min}</code>, <code class="text-slate-300">{max}</code>, <code class="text-slate-300">{percent}</code>.</p>
+        <pre class="bg-slate-800 rounded-lg p-4 text-xs leading-relaxed overflow-x-auto"><code><span class="code-punct">&lt;</span><span class="code-tag">progress-ring</span>
+  <span class="code-attr">value</span><span class="code-punct">=</span><span class="code-val">"3"</span>
+  <span class="code-attr">max</span><span class="code-punct">=</span><span class="code-val">"10"</span>
+  <span class="code-attr">label-format</span><span class="code-punct">=</span><span class="code-val">"{value} of {max}"</span>
+<span class="code-punct">&gt;&lt;/</span><span class="code-tag">progress-ring</span><span class="code-punct">&gt;</span></code></pre>
+      </div>
+
       <!-- ── text-override ───────────────────────────────────────────────── -->
       <div class="bg-slate-900 rounded-2xl p-6 flex flex-col gap-6">
         <h2 class="text-sm font-semibold text-slate-400 uppercase tracking-wider">Text override</h2>

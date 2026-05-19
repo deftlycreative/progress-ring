@@ -685,6 +685,38 @@ describe("label-format", () => {
         expect(label(el).textContent).toBe("33");
     });
 
+    it("label-format template: {value} is replaced with raw value", () => {
+        el = mount({ value: 3, max: 10, "label-format": "{value} of {max}", animated: false });
+        expect(label(el).textContent).toBe("3 of 10");
+    });
+
+    it("label-format template: {percent} is replaced with rounded percent", () => {
+        el = mount({ value: 1, max: 3, "label-format": "{percent}%", animated: false });
+        expect(label(el).textContent).toBe("33%");
+    });
+
+    it("label-format template: {min} is replaced", () => {
+        el = mount({ value: 5, min: 2, max: 10, "label-format": "{value}/{max} (min {min})", animated: false });
+        expect(label(el).textContent).toBe("5/10 (min 2)");
+    });
+
+    it("label-format template: all four tokens in one string", () => {
+        el = mount({ value: 5, min: 0, max: 10, "label-format": "{value} of {max} — {percent}% (min {min})", animated: false });
+        expect(label(el).textContent).toBe("5 of 10 — 50% (min 0)");
+    });
+
+    it("label-format template: text-override still takes precedence", () => {
+        el = mount({ value: 3, max: 10, "label-format": "{value} of {max}", "text-override": "custom", animated: false });
+        expect(label(el).textContent).toBe("custom");
+    });
+
+    it("label-format template: updates reactively when value changes", async () => {
+        el = mount({ value: 3, max: 10, "label-format": "{value} of {max}", animated: false });
+        el.setAttribute("value", "7");
+        await Promise.resolve();
+        expect(label(el).textContent).toBe("7 of 10");
+    });
+
 });
 
 // ── text-override ─────────────────────────────────────────────────────────────
